@@ -1,0 +1,11 @@
+.login {
+  margin-top: 5rem;
+  padding: 3rem;
+  background: #F4F4F9;
+  box-shadow: 3px 3px 5px 1px rgba(0,0,0,.2);
+  border-radius: 10px;
+}
+
+#login-btn {
+  box-shadow: 2px 2px 2px 1px rgba(0,0,0,.2);
+}
