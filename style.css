@@ -7,6 +7,11 @@
 }
 
 #login-btn {
+  justify-content: center;
+  margin: 0 auto;
+  display: flex;
+  padding: .5rem 2rem;
+  margin-top: 2rem;
   box-shadow: 2px 2px 2px 1px rgba(0,0,0,.2);
 }
 
@@ -16,4 +21,8 @@
   box-shadow: 2px 2px 2px 1px rgba(0,0,0,.2);
   border-radius: 10px;
   margin: 2rem;
+}
+
+.login-input {
+  width: 100%;
 }
