@@ -1,9 +1,57 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <style type="text/css">
+        #flot-placeholder{width:750px;height:300px;}
+    </style>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="jquery.flot.js"></script>
+    <script type="text/javascript">
+        var data1 = [
+            [1, 130], [2, 40], [3, 80], [4, 160], [5, 159], [6, 370],
+            [7, 330], [8, 350], [9, 370], [10, 400], [11, 330], [12, 350]
+        ];
+        var data2 = [
+            [1, 350], [2, 330], [3, 400], [4, 370], [5, 350], [6, 330],  [7, 159], [8, 370],
+            [9, 160], [10, 130], [11, 40], [12, 80]
+
+        ];
+        var data3 = [
+            [1, 330], [2, 350], [3, 370], [4, 400], [5, 330], [6, 350],
+            [7, 130], [8, 40], [9, 80], [10, 160], [11, 159], [12, 370]
+        ];
+
+        var dataset = [
+          {
+            label: "line1",
+            data: data1
+          }
+        ];
+
+        var options = {
+            series: {
+                lines: { show: true,
+                fill: true },
+                points: {
+                    radius: 3,
+                    show: false
+                }
+            }
+        };
+
+        $(document).ready(function () {
+            $.plot($("#flot-placeholder"), dataset, options);
+        });
+    </script>
+</head>
 <body>
+    <header>
 
-<h1>Success!</h1>
+    </header>
 
+    <h1>Success!</h1>
+
+    <div id="flot-placeholder"></div>
 
 
 </body>
