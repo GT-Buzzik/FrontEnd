@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <style type="text/css">
         #flot-placeholder{width:750px;height:300px;}
     </style>
@@ -21,12 +21,26 @@
             [7, 130], [8, 40], [9, 80], [10, 160], [11, 159], [12, 370]
         ];
 
-        var dataset = [
+        var dataset1 = [
           {
-            label: "line1",
+            label: "dataset1",
             data: data1
           }
         ];
+		
+		var dataset2 = [
+			{
+				label: "dataset2",
+				data: data2
+			}
+		];
+		
+		var dataset3 = [
+			{
+				label: "dataset3",
+				data: data3
+			}
+		];
 
         var options = {
             series: {
@@ -38,9 +52,25 @@
                 }
             }
         };
+		
+		function plotDataset1() {
+			$.plot($("#flot-placeholder"), dataset1, options);
+		}
+		
+		function plotDataset2() {
+			$.plot($("#flot-placeholder"), dataset2, options);
+		}
+		
+		function plotDataset3() {
+			$.plot($("#flot-placeholder"), dataset3, options);
+		}
 
         $(document).ready(function () {
-            $.plot($("#flot-placeholder"), dataset, options);
+            plotDataset1();
+			
+			document.getElementById("dataset1-btn").onclick = plotDataset1;
+			document.getElementById("dataset2-btn").onclick = plotDataset2;
+			document.getElementById("dataset3-btn").onclick = plotDataset3;
         });
     </script>
 </head>
@@ -52,6 +82,12 @@
     <h1>Success!</h1>
 
     <div id="flot-placeholder"></div>
+	
+	<div>
+		<button type="button" id="dataset1-btn">Dataset 1</button>
+		<button type="button" id="dataset2-btn">Dataset 2</button>
+		<button type="button" id="dataset3-btn">Dataset 3</button>
+	</div>
 
 
 </body>
