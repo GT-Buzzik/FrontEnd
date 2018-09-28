@@ -20,27 +20,30 @@
             [1, 330], [2, 350], [3, 370], [4, 400], [5, 330], [6, 350],
             [7, 130], [8, 40], [9, 80], [10, 160], [11, 159], [12, 370]
         ];
-
-        var dataset1 = [
-          {
-            label: "dataset1",
-            data: data1
-          }
-        ];
 		
-		var dataset2 = [
+		var dataset = [
 			{
-				label: "dataset2",
-				data: data2
+				label: "dataset1",
+				data: data1
 			}
 		];
 		
-		var dataset3 = [
-			{
+		var allDatasets = {
+			dataset1: {
+				label: "dataset1",
+				data: data1
+			},
+			
+			dataset2: {
+				label: "dataset2",
+				data: data2
+			},
+			
+			dataset3: {
 				label: "dataset3",
 				data: data3
 			}
-		];
+		};
 
         var options = {
             series: {
@@ -53,24 +56,25 @@
             }
         };
 		
-		function plotDataset1() {
-			$.plot($("#flot-placeholder"), dataset1, options);
-		}
-		
-		function plotDataset2() {
-			$.plot($("#flot-placeholder"), dataset2, options);
-		}
-		
-		function plotDataset3() {
-			$.plot($("#flot-placeholder"), dataset3, options);
+		function plotDataset() {
+			// fill in dataset
+			dataset = [];
+			
+			var datasetsChecked = document.getElementsByClassName('datasetCheckbox');
+			for (var i = 0; datasetsChecked[i]; ++i) {
+				if (datasetsChecked[i].checked) {
+					dataset.push(allDatasets[datasetsChecked[i].value]);
+				}
+			}
+			
+			// plot
+			$.plot($("#flot-placeholder"), dataset, options);
 		}
 
         $(document).ready(function () {
-            plotDataset1();
+            plotDataset();
 			
-			document.getElementById("dataset1-btn").onclick = plotDataset1;
-			document.getElementById("dataset2-btn").onclick = plotDataset2;
-			document.getElementById("dataset3-btn").onclick = plotDataset3;
+			document.getElementById("plot-btn").onclick = plotDataset;
         });
     </script>
 </head>
@@ -84,11 +88,14 @@
     <div id="flot-placeholder"></div>
 	
 	<div>
-		<button type="button" id="dataset1-btn">Dataset 1</button>
-		<button type="button" id="dataset2-btn">Dataset 2</button>
-		<button type="button" id="dataset3-btn">Dataset 3</button>
+		<form>
+			<input type="checkbox" class="datasetCheckbox" id="dataset1" value="dataset1"><label>Dataset 1</label>
+			<input type="checkbox" class="datasetCheckbox" id="dataset2" value="dataset2"><label>Dataset 2</label>
+			<input type="checkbox" class="datasetCheckbox" id="dataset3" value="dataset3"><label>Dataset 3</label>
+		</form>
+		
+		<button type="button" id="plot-btn">Plot</button>
 	</div>
-
 
 </body>
 </html>
