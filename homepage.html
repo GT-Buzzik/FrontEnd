@@ -1,80 +1,216 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <style type="text/css">
         #flot-placeholder{width:750px;height:300px;}
     </style>
     <script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="jquery.flot.js"></script>
+    <script type="text/javascript" src="jquery.flot.time.js"></script>
     <script type="text/javascript">
-        var data1 = [
-            [1, 130], [2, 40], [3, 80], [4, 160], [5, 159], [6, 370],
-            [7, 330], [8, 350], [9, 370], [10, 400], [11, 330], [12, 350]
-        ];
-        var data2 = [
+
+        const Url = 'https://buzzik-cooperpellaton.c9users.io:8080/fetch_listening_history?id=spotify:user:cooperpellaton';
+        $.ajax({
+            url:Url,
+            type:"GET",
+            success: function(result) {
+                console.log(result)
+            },
+            error:function(error){
+                console.log('Error ${error}')
+            }
+        });
+
+        var spotifyPull = [
+    {
+        "listening_date": 1481661737016,
+        "track": {
+            "artists": [
+                {
+                "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/5INjqkS1o8h1imAzPqGZBb"
+                },
+                "href": "https://api.spotify.com/v1/artists/5INjqkS1o8h1imAzPqGZBb",
+                "id": "5INjqkS1o8h1imAzPqGZBb",
+                "name": "Tame Impala",
+                "type": "artist",
+                "uri": "spotify:artist:5INjqkS1o8h1imAzPqGZBb"
+                }
+            ],
+            "available_markets": [
+                "CA",
+                "MX",
+                "US"
+            ],
+            "disc_number": 1,
+            "duration_ms": 108546,
+            "explicit": false,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/2gNfxysfBRfl9Lvi9T3v6R"
+            },
+            "href": "https://api.spotify.com/v1/tracks/2gNfxysfBRfl9Lvi9T3v6R",
+            "id": "2gNfxysfBRfl9Lvi9T3v6R",
+            "name": "Disciples",
+            "preview_url": "https://p.scdn.co/mp3-preview/6023e5aac2123d098ce490488966b28838b14fa2",
+            "track_number": 9,
+            "type": "track",
+            "uri": "spotify:track:2gNfxysfBRfl9Lvi9T3v6R"
+        }
+    },
+    {
+        "listening_date": 1481661844589,
+        "track": {
+            "artists": [{
+                "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/5INjqkS1o8h1imAzPqGZBb"
+                },
+                "href": "https://api.spotify.com/v1/artists/5INjqkS1o8h1imAzPqGZBb",
+                "id": "5INjqkS1o8h1imAzPqGZBb",
+                "name": "Tame Impala",
+                "type": "artist",
+                "uri": "spotify:artist:5INjqkS1o8h1imAzPqGZBb"
+            }],
+            "available_markets": [
+                "CA",
+                "MX",
+                "US"
+            ],
+            "disc_number": 1,
+            "duration_ms": 108546,
+            "explicit": false,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/2gNfxysfBRfl9Lvi9T3v6R"
+            },
+            "href": "https://api.spotify.com/v1/tracks/2gNfxysfBRfl9Lvi9T3v6R",
+            "id": "2gNfxysfBRfl9Lvi9T3v6R",
+            "name": "Disciples",
+            "preview_url": "https://p.scdn.co/mp3-preview/6023e5aac2123d098ce490488966b28838b14fa2",
+            "track_number": 9,
+            "type": "track",
+            "uri": "spotify:track:2gNfxysfBRfl9Lvi9T3v6R"
+        }
+    },
+    {
+        "listening_date": 1481661844589,
+        "track": {
+            "artists": [{
+                "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/5INjqkS1o8h1imAzPqGZBb"
+                },
+                "href": "https://api.spotify.com/v1/artists/5INjqkS1o8h1imAzPqGZBb",
+                "id": "5INjqkS1o8h1imAzPqGZBb",
+                "name": "Tame Impala",
+                "type": "artist",
+                "uri": "spotify:artist:5INjqkS1o8h1imAzPqGZBb"
+            }],
+            "available_markets": [
+                "CA",
+                "MX",
+                "US"
+            ],
+            "disc_number": 1,
+            "duration_ms": 108546,
+            "explicit": false,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/2gNfxysfBRfl9Lvi9T3v6R"
+            },
+            "href": "https://api.spotify.com/v1/tracks/2gNfxysfBRfl9Lvi9T3v6R",
+            "id": "2gNfxysfBRfl9Lvi9T3v6R",
+            "name": "Disciples",
+            "preview_url": "https://p.scdn.co/mp3-preview/6023e5aac2123d098ce490488966b28838b14fa2",
+            "track_number": 9,
+            "type": "track",
+            "uri": "spotify:track:2gNfxysfBRfl9Lvi9T3v6R"
+        }
+    },
+    {
+        "listening_date": 1481761844589,
+        "track": {
+            "artists": [{
+                "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/5INjqkS1o8h1imAzPqGZBb"
+                },
+                "href": "https://api.spotify.com/v1/artists/5INjqkS1o8h1imAzPqGZBb",
+                "id": "5INjqkS1o8h1imAzPqGZBb",
+                "name": "Tame Impala",
+                "type": "artist",
+                "uri": "spotify:artist:5INjqkS1o8h1imAzPqGZBb"
+            }],
+            "available_markets": [
+                "CA",
+                "MX",
+                "US"
+            ],
+            "disc_number": 1,
+            "duration_ms": 108546,
+            "explicit": false,
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/2gNfxysfBRfl9Lvi9T3v6R"
+            },
+            "href": "https://api.spotify.com/v1/tracks/2gNfxysfBRfl9Lvi9T3v6R",
+            "id": "2gNfxysfBRfl9Lvi9T3v6R",
+            "name": "Disciples",
+            "preview_url": "https://p.scdn.co/mp3-preview/6023e5aac2123d098ce490488966b28838b14fa2",
+            "track_number": 9,
+            "type": "track",
+            "uri": "spotify:track:2gNfxysfBRfl9Lvi9T3v6R"
+        }
+    }
+];
+        var data1 = [];
+        for (i=0; i < spotifyPull.length; i++) {
+            var exists = false;
+            dateTime = spotifyPull[i].listening_date;
+            date = Math.floor(dateTime / 1000000);
+            for (j = 0; j < data1.length; j++) {
+                if (Math.floor(data1[j][0] / 1000000) == date) {
+                    data1[j][1] = data1[j][1] + 1;
+                    exists = true;
+                }
+            }
+            if (exists == false) {
+                data1.push([dateTime, 1]);
+            }
+
+        }
+
+
+        var dataTest = [
             [1, 350], [2, 330], [3, 400], [4, 370], [5, 350], [6, 330],  [7, 159], [8, 370],
             [9, 160], [10, 130], [11, 40], [12, 80]
 
         ];
-        var data3 = [
-            [1, 330], [2, 350], [3, 370], [4, 400], [5, 330], [6, 350],
-            [7, 130], [8, 40], [9, 80], [10, 160], [11, 159], [12, 370]
+
+
+
+
+        var dataset = [
+          {
+            label: "line1",
+            data: data1
+
+          }
         ];
-		
-		var dataset = [
-			{
-				label: "dataset1",
-				data: data1
-			}
-		];
-		
-		var allDatasets = {
-			dataset1: {
-				label: "dataset1",
-				data: data1
-			},
-			
-			dataset2: {
-				label: "dataset2",
-				data: data2
-			},
-			
-			dataset3: {
-				label: "dataset3",
-				data: data3
-			}
-		};
 
         var options = {
             series: {
-                lines: { show: true,
-                fill: true },
+                lines: {
+                    show: true,
+                    fill: true
+                },
                 points: {
                     radius: 3,
-                    show: false
-                }
+                    show: true
+                },
+            },
+            xaxis: {
+                mode: "time",
+                timeformat: "%Y/%m/%d"
             }
         };
-		
-		function plotDataset() {
-			// fill in dataset
-			dataset = [];
-			
-			var datasetsChecked = document.getElementsByClassName('datasetCheckbox');
-			for (var i = 0; datasetsChecked[i]; ++i) {
-				if (datasetsChecked[i].checked) {
-					dataset.push(allDatasets[datasetsChecked[i].value]);
-				}
-			}
-			
-			// plot
-			$.plot($("#flot-placeholder"), dataset, options);
-		}
 
         $(document).ready(function () {
-            plotDataset();
-			
-			document.getElementById("plot-btn").onclick = plotDataset;
+            $.plot($("#flot-placeholder"), dataset, options);
         });
     </script>
 </head>
@@ -86,16 +222,7 @@
     <h1>Success!</h1>
 
     <div id="flot-placeholder"></div>
-	
-	<div>
-		<form>
-			<input type="checkbox" class="datasetCheckbox" id="dataset1" value="dataset1"><label>Dataset 1</label>
-			<input type="checkbox" class="datasetCheckbox" id="dataset2" value="dataset2"><label>Dataset 2</label>
-			<input type="checkbox" class="datasetCheckbox" id="dataset3" value="dataset3"><label>Dataset 3</label>
-		</form>
-		
-		<button type="button" id="plot-btn">Plot</button>
-	</div>
+
 
 </body>
 </html>
