@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+	
+	<link rel="stylesheet" type="text/css" href="default.css">
     <link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="content.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="jquery.flot.js"></script>
@@ -51,12 +53,14 @@
 
 
 
-		var labelToData = {
-			"Number of Songs Played": numberSongsData
-		};
-
-        var options = {
+		var options = {
             series: {
+				/*bars: {
+					show: true,
+					fill: true,
+					align: "left
+				}*/
+			
                 lines: {
                     show: true,
                     fill: true
@@ -66,75 +70,135 @@
                     show: true
                 },
             },
+			legend: {
+				show: false
+			},
             xaxis: {
                 mode: "time",
                 timeformat: "%Y/%m/%d"
-            }
+            },
+			yaxis: {
+				tickDecimals: 0
+			}
         };
 
 
+		var viewSwitchedOff = "select-day";
+		function switchView(timeformat, toSwitchOff) {
+			options.xaxis.timeformat = timeformat;
+			document.getElementById(viewSwitchedOff).disabled = false;
+			document.getElementById(toSwitchOff).disabled = true;
+			viewSwitchedOff = toSwitchOff;
+		}
+		
 
 		function visualizeDataset() {
-			// fill in dataset
-			dataset = [];
-
-			var datasetsChecked = document.getElementsByClassName('datasetCheckbox');
-			for (var i = 0; datasetsChecked[i]; ++i) {
-				if (datasetsChecked[i].checked) {
-					dataset.push({
-						label: datasetsChecked[i].value,
-						data: labelToData[datasetsChecked[i].value]
-					});
+			// construct raw data
+			rawData = numberSongsData;
+			
+			// fill in dataset and plot
+			dataset = [
+				{
+					data: rawData
 				}
-			}
+			];
 
-			$.plot($("#flot-placeholder"), dataset, options);
+			$.plot($("#graph-placeholder"), dataset, options);
 		}
 
         $(document).ready(function () {
-			document.getElementById("numSongsPlayed-btn").checked = true;
+			document.getElementById(viewSwitchedOff).disabled = true;
 			visualizeDataset();
-
-			document.getElementById("refine-btn").onclick = visualizeDataset;
-        });
-
-        //Gotta get this to work. It should add a red outline
-        $('#datasetCheckbox').on('change', function () {
-            $('#datasetCheckbox').not(this).closest('li').removeClass('selected');
-            $('#datasetCheckbox').not(this).attr("checked", false);
-            console.log("working");
-            $(this).closest('li').addClass('selected');
-            $(this).attr('checked', true);
         });
     </script>
 </head>
 <body>
-    <header>
-
-    </header>
-
-    <div id="flot-placeholder"></div>
-
-    <div id="options">
-        <font size = "+2"><b>Filtering Options</b>:</font>
-    </div>
-	<div id="toolbar">
-        <font id="listhead">Data Shown:</font>
-		<ul class = "selections">
-          <li>
-		  	   <input type="radio" class="datasetCheckbox" id="numSongsPlayed-btn" value="Number of Songs Played" name="dataType"><label>Number of Songs Played</label>
-		  </li>
-          <li>
-               <input type="radio" class="datasetCheckbox" id="option2-btn" value="Option2" name="dataType"><label>Option 2</label>
-          </li>
-          <li>
-               <input type="radio" class="datasetCheckbox" id="option3-btn" value="Option3" name="dataType"><label>Option 3</label>
-          </li>
-        </ul>
-
-		<button type="button" id="refine-btn">Refine</button>
-	</div>
-
+    
+	<section id="content" class="one-sidebar">
+		<div id="sidebar-left" class="sidebar">
+		
+			<!-- TODO the help icon -->
+			<div id="buzzik-help"></div>
+		
+			<div id="graph-control-title" class="yellow">
+				<div class="emboldend enlarged left-15 center-vert">Filtering Options:</div>
+			</div>
+			
+			<div id="graph-control">
+				<div id="graph-control-view">
+					<div class="emboldend left-15">View by:</div>
+					<div class="separator-line"></div>
+					<div class="spacer-10"></div>
+					<div class="left-15">
+						<div id="graph-control-view-selector" class="btn-group">
+							<button id="select-day" class="btn btn-4" value="day" onclick='switchView("%Y/%m/%d", "select-day")'>
+								Day
+							</button>
+							<button id="select-week" class="btn btn-4" value="week" onclick='switchView("%Y/%m/%d", "select-week")'>
+								Week
+							</button>
+							<button id="select-month" class="btn btn-4" value="month" onclick='switchView("%Y/%m", "select-month")'>
+								Month
+							</button>
+							<button id="select-year" class="btn btn-4" value="year" onclick='switchView("%Y", "select-year")'>
+								Year
+							</button>
+						</div>
+					</div>
+				</div>
+				
+				<div class="spacer-30"></div>
+				
+				<div id="graph-control-range">
+					<div class="emboldend left-15">Date Range:</div>
+					<div class="separator-line"></div>
+					<div class="spacer-10"></div>
+					<div>
+						<table class="left-15">
+							<tr>
+								<th style="width: 20%;">From:</th>
+								<th><form><input type="text"></input></form></th>
+							</tr>
+							<tr>
+								<td>To:</td>
+								<td><form><input type="text"></input></form></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			
+				<div class="spacer-20"></div>
+				
+				<div id="graph-control-filters">
+					<div class="emboldend left-15">Filter by:</div>
+					<div class="separator-line"></div>
+					<div class="spacer-10"></div>
+					<div class="left-15">[[FEATURE PENDING]]</div>
+				</div>
+			</div>
+			
+			<div id="graph-control-refine">
+				<button id="graph-control-refine-btn" class="btn yellow" onclick="visualizeDataset();">
+					Refine
+				</button>
+			</div>
+		</div>
+		
+		<!-- MAIN CONTENT: Graph -->
+		<div id="main-content">
+		
+			<div id="graph-container">
+				<div id="graph-placeholder"></div>
+			</div>
+			
+			<div id="options-container">
+				<button class="btn btn-4">Export</button>
+				<button class="btn btn-4">Upload</button>
+				<button class="btn btn-4">Night</button>
+				<button class="btn btn-4 red">Logout</button>
+			</div>
+		</div>
+	</section>
 
 </body>
 </html>
