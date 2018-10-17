@@ -594,11 +594,15 @@ Licensed under the MIT license.
                     color: "#545454", // primary color used for outline and labels
                     backgroundColor: null, // null for transparent, else color
                     borderColor: null, // set if different from the grid color
-                    tickColor: null, // color for the ticks, e.g. "rgba(0,0,0,0.15)"
+                    tickColor: "#ffffff", // color for the ticks, e.g. "rgba(0,0,0,0.15)"
                     margin: 0, // distance from the canvas edge to the grid
                     labelMargin: 5, // in pixels
                     axisMargin: 8, // in pixels
                     borderWidth: 2, // in pixels
+                    borderColor: {top: "#ffffff",
+                    			  right: "#ffffff",
+                    			  bottom: "#ababab",
+                    			  left: "#ababab"},
                     minBorderMargin: null, // in pixels, null means taken from points radius
                     markings: null, // array of ranges or fn: axes -> array of ranges
                     markingsColor: "#f4f4f4",
@@ -2010,7 +2014,7 @@ Licensed under the MIT license.
                             ctx.lineTo(xrange.to + subPixel, yrange.to);
                         } else {
                             ctx.moveTo(xrange.from, yrange.to + subPixel);
-                            ctx.lineTo(xrange.to, yrange.to + subPixel);                            
+                            ctx.lineTo(xrange.to, yrange.to + subPixel);
                         }
                         ctx.stroke();
                     } else {
@@ -2525,9 +2529,9 @@ Licensed under the MIT license.
                 radius = series.points.radius,
                 symbol = series.points.symbol;
 
-            // If the user sets the line width to 0, we change it to a very 
+            // If the user sets the line width to 0, we change it to a very
             // small value. A line width of 0 seems to force the default of 1.
-            // Doing the conditional here allows the shadow setting to still be 
+            // Doing the conditional here allows the shadow setting to still be
             // optional even with a lineWidth of 0.
 
             if( lw == 0 )
