@@ -29,9 +29,12 @@
 
         var viewsEnum = Object.freeze({"day": 8640000, "week": 60480000, "month": 259200000,"year":3154000000}), //Enum to help sort date based on current view
             viewComp = viewsEnum.day,
+            widthEnum = Object.freeze({"day": 7000000, "week": 60480000, "month": 259200000,"year":3154000000}),
+            viewWidth = widthEnum.day,
 		    numberSongsData = [],
-            defaultMin = null,
-            defaultMax = null; //change these to start at the current academic year
+            defaultMin = null, //1534723200000, Midnight August 20th (first day of class Fall 2018)
+            defaultMax = null; //1544918400000, Midnight December 16th (End of Term Fall 2018)
+            // ticks = [];
 
         function sortByTime() {
             numberSongsData = [];
@@ -48,24 +51,23 @@
                 if (exists == false) {
                     numberSongsData.push([dateTime, 1]);
                 }
-
             }
+            // for(i=0; i <numberSongsData.length;i++) {
+            //     ticks.push([i, numberSongsData[i][0]]);
+            // }
         }
         sortByTime();
-
-
+        //console.log(ticks);
+        var check = true;
 
 		var options = {
             series: {
 				bars: {
-					show: true,
-					fill: true,
-                    barWidth: 10,
-					align: "center"
+					show: true
 				},
 
                 lines: {
-                    show: true,
+                    show: false,
                     fill: true
                 },
                 points: {
@@ -76,6 +78,11 @@
 			legend: {
 				show: false
 			},
+            bars: {
+                    fill: true,
+                    barWidth: viewWidth,
+                    align: "center"
+            },
             xaxis: {
                 mode: "time",
                 timeformat: "%d/%m/%Y",
@@ -97,13 +104,18 @@
 			viewSwitchedOff = toSwitchOff;
             if (toSwitchOff == "select-day") {
                 viewComp = viewsEnum.day;
+                viewWidth = widthEnum.day;
             } else if (toSwitchOff == "select-week") {
                 viewComp = viewsEnum.week;
+                viewWidth = widthEnum.week;
             } else if (toSwitchOff == "select-month") {
                 viewComp = viewsEnum.month;
+                viewWidth = widthEnum.month;
             } else if (toSwitchOff == "select-year") {
                 viewComp = viewsEnum.year;
+                viewWidth = widthEnum.year;
             }
+            check != check;
             sortByTime();
 		}
 
