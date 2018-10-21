@@ -222,7 +222,7 @@ var pieOptions = {
         pie: {
             show: true,
             radius: .8,
-            InnerRadius: .5
+            innerRadius: .5
         }
     },
     legend: {
