@@ -10,7 +10,9 @@
     <script type="text/javascript" src="jquery.flot.js"></script>
     <script type="text/javascript" src="jquery.flot.time.js"></script>
     <script type="text/javascript" src="jquery.flot.pie.js"></script>
-    <script type="text/javascript" src="buzzik.js">visualizeDataset();</script>
+    <script type="text/javascript" src="buzzik.js">
+            visualizeDataset();
+    </script>
 </head>
 <body>
 
@@ -24,7 +26,7 @@
 				<div class="emboldend enlarged left-15 center-vert">Filtering Options:</div>
 			</div>
 
-			<div id="graph-control">
+			<div id="graph-control" style="overflow-y:scroll">
 				<div id="graph-control-view">
 					<div class="emboldend left-15">View by:</div>
 					<div class="separator-line"></div>
@@ -34,9 +36,9 @@
 							<button id="select-day" class="btn btn-4" value="day" onclick='switchView("%d/%m/%Y", "select-day")'>
 								Day
 							</button>
-							<button id="select-week" class="btn btn-4" value="week" onclick='switchView("%d/%m/%Y", "select-week")'>
+							<!-- <button id="select-week" class="btn btn-4" value="week" onclick='switchView("%d/%m/%Y", "select-week")'>
 								Week
-							</button>
+							</button> -->
 							<button id="select-month" class="btn btn-4" value="month" onclick='switchView("%m/%Y", "select-month")'>
 								Month
 							</button>
@@ -70,11 +72,40 @@
 				<div class="spacer-20"></div>
 
 				<div id="graph-control-filters">
-					<div class="emboldend left-15">Filter by:</div>
+					<div class="emboldend left-15">Chart Type:</div>
 					<div class="separator-line"></div>
 					<div class="spacer-10"></div>
-					<div class="left-15">[[FEATURE PENDING]]</div>
+					<div class="left-15">
+                        <button id="select-bar" class="btn btn-5" value="bar" onclick='switchChart("bar", "select-bar")'>
+                                Bar Chart
+                        </button>
+                        <button id="select-pie" class="btn btn-5" value="pie" onclick='switchChart("pie", "select-pie")'>
+                                Pie Chart
+                        </button>
+                        <button id="select-line" class="btn btn-5" value="line" onclick='switchChart("line", "select-line")'>
+                                Line Chart
+                        </button>
+                    </div>
 				</div>
+
+                <div class="spacer-20"></div>
+
+                <div id="graph-control-filters">
+                    <div class="emboldend left-15">Filter By:</div>
+                    <div class="separator-line"></div>
+                    <div class="spacer-10"></div>
+                    <div class="left-15">
+                        <button id="select-none" class="btn btn-5" value="noFilter" onclick='switchFilter("none", "select-none")'>
+                                No Filter
+                        </button>
+                        <button id="select-artist" class="btn btn-5" value="artist" onclick='switchFilter("artist", "select-artist")'>
+                                Artist
+                        </button>
+                        <button id="select-title" class="btn btn-5" value="title" onclick='switchFilter("title", "select-title")'>
+                                Song Title
+                        </button>
+                    </div>
+                </div>
 			</div>
 
 			<div id="graph-control-refine">
@@ -92,10 +123,10 @@
 			</div>
 
 			<div id="options-container">
-				<button class="btn btn-4">Export</button>
-				<button class="btn btn-4">Upload</button>
-				<button class="btn btn-4">Night</button>
-				<button class="btn btn-4 red">Logout</button>
+				<button class="btn btn-6">Export</button>
+				<button class="btn btn-6">Upload</button>
+				<button class="btn btn-6">Night</button>
+				<button class="btn btn-6 red">Logout</button>
 			</div>
 		</div>
 	</section>

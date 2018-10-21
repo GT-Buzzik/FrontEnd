@@ -6,9 +6,9 @@ html, body {
 input {
 	border: 1px solid white;
 	border-radius: 3px;
-	
+
 	box-shadow: 1px 1px 2px 0px #b3b3b3;
-	
+
 	position: static;
 	top: 0;
 	left: 0;
@@ -26,13 +26,13 @@ input {
 
 #sidebar-left {
 	border-right: 1px solid #a6a6a6;
-	
+
 	left: 0;
 }
 
 #sidebar-right {
 	border-left: 1px solid #a6a6a6;
-	
+
 	right: 0;
 }
 
@@ -41,11 +41,11 @@ input {
 	border: 1px solid #d4a723;
 	border-left: 0px;
 	border-right: 0px;
-	
+
 	display: table;
-	
+
 	padding: 15px;
-	
+
 	position: absolute;
 	bottom: 70%;
 	left: 0;
@@ -55,11 +55,11 @@ input {
 
 #graph-control {
 	background-color: #eeeeee;
-	
+
 	border: 1px solid #dddddd;
-	
+
 	padding: 16px 10px;
-	
+
 	position: absolute;
 	bottom: 8%;
 	left: 0;
@@ -74,14 +74,14 @@ input {
 #graph-control table, th, td {
 	background-color: #eeeeee;
 	color: black;
-	
+
 	border: 0px;
-	
+
 	padding-top: 7px;
 	padding-bottom: 7px;
 	padding-left: 0px;
 	padding-right: 14px;
-	
+
 	font-weight: normal;
 }
 
@@ -93,7 +93,7 @@ input {
 
 #graph-control-refine {
 	background-color: white;
-	
+
 	position: absolute;
 	bottom: 0;
 	left: 0;
@@ -103,7 +103,7 @@ input {
 
 #graph-control-refine-btn {
 	margin: 0px 6px;
-	
+
 	position: absolute;
 	top: 25%;
 	right: 0;
@@ -113,7 +113,7 @@ input {
 
 #main-content {
 	background-color: #e2e2e2;
-	
+
 	position: fixed;
 	top: 0;
 	right: 0;
@@ -124,11 +124,11 @@ input {
 
 #graph-container {
 	background-color: white;
-	
+
 	border: 1px solid #dddddd;
-	
+
 	margin: 24px 32px;
-	
+
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -138,7 +138,7 @@ input {
 
 #graph-placeholder {
 	margin: 20px;
-	
+
 	position: absolute;
 	top: 0;
 	bottom: 0;
@@ -149,7 +149,7 @@ input {
 
 #options-container {
 	margin: 16px 32px;
-	
+
 	position: absolute;
 	bottom: 0;
 	right: 0;
@@ -196,14 +196,14 @@ input {
 
 .btn {
 	background-color: white;
-	
+
 	border: 1px solid white;
 	border-radius: 3px;
-	
+
 	box-shadow: 1px 1px 2px 0px #b3b3b3;
-	
+
 	height: 25px;
-	
+
 	font-family: "Arial", Arial, sans-serif;
 	font-size: 11px;
 	font-weight: bold;
@@ -211,13 +211,24 @@ input {
 
 .btn:disabled {
 	background-color: #c6c6c6;
-	
+
 	border-color: #c6c6c6;
-	
+
 	color: black;
 }
 
 .btn-4 {
+	width: 29%;
+	margin-right: 1%;
+}
+
+.btn-5 {
+	width: 50%;
+	margin-right: 5%;
+	margin-bottom: 5%;
+}
+
+.btn-6 {
 	width: 22%;
 	margin-right: 1%;
 }
@@ -226,12 +237,12 @@ input {
 
 .red {
 	background-color: #ff3426;
-	
+
 	border-color: #f95445;
 }
 
 .yellow {
 	background-color: #fcb913;
-	
+
 	border-color: #d4a723;
 }
