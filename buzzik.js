@@ -19,10 +19,14 @@ var spotifyPull = [{"listening_date":1537134884326,"track":{"album":{"album_type
 var viewsEnum = Object.freeze({"day": 86400000, "week": 604800000, "month": 2592000000,"year":31540000000}), //Enum to help sort date based on current view
     viewComp = viewsEnum.day,
     numberSongsData = [],
+    artistsBreakdown = [], //A breakdown consists of the four top results and the combined weight of all other categories.
+    titlesBreakdown = [],
     defaultMin = null,
     defaultMax = null; //change these to start at the current academic year
 
 var viewSwitchedOff = "select-day";
+var chartSwitchedOff = "select-bar";
+var filterSwitchedOff = "select-none";
 
 
 function compareDay(date1, date2) {
@@ -112,10 +116,64 @@ function sortByTime() {
         */
     }
 }
+
+
+function sortByArtist() {
+    artistsData = [];
+    artistsInData = [];
+
+    var comparatorFunc = function(artist1, artist2) {
+        if (artist1 == artist2)
+            {return true;}
+        else
+            {return false;}
+    }
+
+
+    for (i=0; i < spotifyPull.length; i++) {
+        var exists = false;
+        var artist = spotifyPull[i].track.artists.name;
+        for (var j = 0; j < artistsData.length; j++) {
+            if (comparatorFunc(artistsInData[j], artist)) {
+                artistsData[j][1]++;
+                exists = true;
+                break;
+            }
+        }
+        if (!exists) {
+            artistsData.push([artist, 1]);
+            artistsInData.push(artist);
+        }
+    }
+
+    //var topFourArtists = []; //To prevent an unviewable amount of data this algo picks out the top four Artists
+    // for(i=0;i<artistsInData.length;i++) {
+    //     for (j=0;j<topFourArtists;j++) {
+    //         if(topFourArtists[j][1] <
+    //     }
+    // }
+    var compareArtists = function(a, b) {
+        return a[1] - b[1];
+    }
+    artistsData.sort(compareArtists); //should sort the array by amount of listens to an artist
+
+    var otherCount = 0;
+    for (i=4;i<artistsData.length;i++) {
+        otherCount += artistsData[i][1];
+    }
+    artistsBreakdown = [artistsData[0], artistsData[1], artistsData[2], artistsData[3], ["Other", otherCount]];
+}
+
+function sortByTitle() {return null;} //Implement
+
+var sortMethod = function() {return null;};
+
+sortMethod = sortByTime; //default value
+
 sortByTime();
-
-
-var options = {
+var rawData = numberSongsData;
+var options = null;
+var barOptions = {
     series: {
         bars: {
             show: true,
@@ -130,13 +188,49 @@ var options = {
     xaxis: {
         mode: "time",
         timeformat: "%d/%m/%Y",
-        ticks: numberSongsData.length,
+        ticks: rawData.length,
         minTickSize: [1, viewSwitchedOff.substring(7)]
     },
     yaxis: {
         tickDecimals: 0,
     }
 };
+
+var lineOptions = {
+    series: {
+        lines: {
+            show: true,
+            fill: true
+        }
+    },
+    legend: {
+        show: false
+    },
+    xaxis: {
+        mode: "time",
+        timeformat: "%d/%m/%Y",
+        ticks: rawData.length,
+        minTickSize: [1, viewSwitchedOff.substring(7)]
+    },
+    yaxis: {
+        tickDecimals: 0,
+    }
+};
+
+var pieOptions = {
+    series: {
+        pie: {
+            show: true,
+            radius: .8,
+            InnerRadius: .5
+        }
+    },
+    legend: {
+        show: false
+    }
+};
+
+options = barOptions;
 
 
 function switchView(timeformat, toSwitchOff) {
@@ -153,8 +247,51 @@ function switchView(timeformat, toSwitchOff) {
     } else if (toSwitchOff == "select-year") {
         viewComp = viewsEnum.year;
     }
+}
 
-    sortByTime();
+function switchChart(chartType, toSwitchOff) {
+    document.getElementById(chartSwitchedOff).disabled = false;
+    document.getElementById(toSwitchOff).disabled = true;
+    chartSwitchedOff = toSwitchOff;
+    switch (chartType) {
+        case 'bar':
+            options = barOptions;
+            break;
+        case 'pie':
+            options = pieOptions;
+            break;
+        case 'line':
+            options = lineOptions;
+            break;
+    }
+}
+
+function switchFilter(filterType, toSwitchOff) {
+    document.getElementById(filterSwitchedOff).disabled = false;
+    document.getElementById(toSwitchOff).disabled = true;
+    filterSwitchedOff = toSwitchOff;
+    switch (filterType) {
+        case 'none':
+            sortMethod = sortByTime;
+            rawData = numberSongsData;
+            options.xaxis.mode = "time";
+            options.xaxis.timeformat = "%d/%m/%Y";
+            break;
+        case 'artist':
+            sortMethod = sortByArtist;
+            rawData = artistsBreakdown;
+            options.xaxis.mode = null;
+            options.xaxis.timeformat = null;
+            console.log("Sort by Artist Under Construction");
+            break;
+        case 'title':
+            sortMethod = sortByTitle;
+            rawData = titlesBreakdown;
+            options.xaxis.mode = null;
+            options.xaxis.timeformat = null;
+            console.log("Sort by Song Title Under Construction");
+            break;
+    }
 }
 
 function convertDateToNumber(text) {
@@ -171,7 +308,8 @@ function convertDateToNumber(text) {
 
 function visualizeDataset() {
     // construct raw data
-    rawData = numberSongsData;
+    sortMethod();
+
 
     // fill in dataset and plot
     dataset = [
@@ -203,5 +341,7 @@ function visualizeDataset() {
 
 $(document).ready(function () {
     document.getElementById(viewSwitchedOff).disabled = true;
+    document.getElementById(chartSwitchedOff).disabled = true;
+    document.getElementById(filterSwitchedOff).disabled = true;
     visualizeDataset();
 });
