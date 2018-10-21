@@ -594,10 +594,10 @@ Licensed under the MIT license.
                     color: "#545454", // primary color used for outline and labels
                     backgroundColor: null, // null for transparent, else color
                     borderColor: null, // set if different from the grid color
-                    tickColor: "#ffffff", // color for the ticks, e.g. "rgba(0,0,0,0.15)"
+                    tickColor: "#ff0000", // color for the ticks, e.g. "rgba(0,0,0,0.15)"
                     margin: 0, // distance from the canvas edge to the grid
                     labelMargin: 5, // in pixels
-                    axisMargin: 8, // in pixels
+                    axisMargin: 0, // in pixels
                     borderWidth: 2, // in pixels
                     borderColor: {top: "#ffffff",
                     			  right: "#ffffff",

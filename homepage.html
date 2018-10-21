@@ -63,13 +63,13 @@
 		function standardizeYear(date) {
 			return new Date(date.getFullYear(), 0);
 		}
+		var standardizeFunc = standardizeDay;
 		
 		function sortByTime() {
 			numberSongsData = [];
 			numberSongsDataDates = [];
 			
 			var comparatorFunc = function(date1, date2) { return false; };
-			var standardizeFunc = function(date) { return Date.now(); };
 			switch (viewComp) {
 				case viewsEnum.day:
 					comparatorFunc = compareDay;
@@ -126,6 +126,33 @@
         sortByTime();
 
 
+		/*function tickGenerator(axis) {
+			var ticks = [];
+			if (viewsComp > axis.max - axis.min) {
+				ticks.push([0.5 * (axis.min + axis.max), "A"]);
+			} else {
+				var num = (axis.max - axis.min) / viewsComp;
+				var lastTick = axis.max;
+				if (num > 12) {
+					var dif = 0.04 * viewsComp;
+					lastTick -= dif;
+					while (lastTick >= axis.min) {
+						var standardDate = standardizeFunc(new Date(lastTick));
+						ticks.push([standardDate.valueOf(), "A"]);
+						lastTick -= 2 * dif;
+					}
+				} else {
+					while (lastTick >= axis.min) {
+						ticks.push([lastTick, "A"]);
+						lastTick -= viewsComp;
+					}
+				}
+			}
+			
+			return ticks;
+		}*/
+		
+		
 		var options = {
             series: {
 				bars: {
@@ -140,9 +167,9 @@
 			},
             xaxis: {
                 mode: "time",
-                timeformat: "%d/%m/%Y",
-                ticks: numberSongsData.length,
-				minTickSize: [1, viewSwitchedOff.substring(7)]
+                timeformat: "%m/%d/%Y",
+				minTickSize: [1, viewSwitchedOff.substring(7)],
+                ticks: 10
             },
 			yaxis: {
 				tickDecimals: 0,
