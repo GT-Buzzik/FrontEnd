@@ -440,6 +440,20 @@ function visualizeDataset() {
     $.plot($("#graph-placeholder"), dataset, options);
 }
 
+function openHelp() {
+  var helpModal = document.getElementById("helpModal");
+  var closeBtn = document.getElementById("closeBtn");
+  helpModal.style.display = "block";
+  closeBtn.onclick = function() {
+    helpModal.style.display = "none";
+  }
+  window.onclick = function(event) {
+    if (event.target == helpModal) {
+        helpModal.style.display = "none";
+    }
+  }
+}
+
 $(document).ready(function () {
     document.getElementById(viewSwitchedOff).disabled = true;
     document.getElementById(chartSwitchedOff).disabled = true;
