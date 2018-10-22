@@ -309,7 +309,9 @@ options = barOptions;
 
 
 function switchView(timeformat, toSwitchOff) {
-    options.xaxis.timeformat = timeformat;
+    if (mode != 'pie') {
+        options.xaxis.timeformat = timeformat;
+    }
     document.getElementById(viewSwitchedOff).disabled = false;
     document.getElementById(toSwitchOff).disabled = true;
     viewSwitchedOff = toSwitchOff;
@@ -353,7 +355,17 @@ function switchFilter(filterType, toSwitchOff) {
             sortMethod = sortByTime;
             if (mode != 'pie') {
                 options.xaxis.mode = "time";
-                options.xaxis.timeformat = "%d/%m/%Y";
+                switch (viewComp) {
+                    case viewsEnum.day:
+                        options.xaxis.timeformat = "%d/%m/%Y";
+                        break;
+                    case viewsEnum.month:
+                        options.xaxis.timeformat = "%m/%Y";
+                        break;
+                    case viewsEnum.year:
+                        options.xaxis.timeformat = "%Y";
+                        break;
+                }
             }
             break;
         case 'artist':
@@ -438,20 +450,6 @@ function visualizeDataset() {
         }
     }
     $.plot($("#graph-placeholder"), dataset, options);
-}
-
-function openHelp() {
-  var helpModal = document.getElementById("helpModal");
-  var closeBtn = document.getElementById("closeBtn");
-  helpModal.style.display = "block";
-  closeBtn.onclick = function() {
-    helpModal.style.display = "none";
-  }
-  window.onclick = function(event) {
-    if (event.target == helpModal) {
-        helpModal.style.display = "none";
-    }
-  }
 }
 
 $(document).ready(function () {
