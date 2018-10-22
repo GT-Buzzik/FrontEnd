@@ -309,7 +309,9 @@ options = barOptions;
 
 
 function switchView(timeformat, toSwitchOff) {
-    options.xaxis.timeformat = timeformat;
+    if (mode != 'pie') {
+        options.xaxis.timeformat = timeformat;
+    }
     document.getElementById(viewSwitchedOff).disabled = false;
     document.getElementById(toSwitchOff).disabled = true;
     viewSwitchedOff = toSwitchOff;
@@ -353,8 +355,17 @@ function switchFilter(filterType, toSwitchOff) {
             sortMethod = sortByTime;
             if (mode != 'pie') {
                 options.xaxis.mode = "time";
-                options.xaxis.timeformat = "%d/%m/%Y";
-            }
+                switch (viewComp) {
+                    case viewsEnum.day:
+                        options.xaxis.timeformat = "%d/%m/%Y";
+                        break;
+                    case viewsEnum.month:
+                        options.xaxis.timeformat = "%m/%Y";
+                        break;
+                    case viewsEnum.year:
+                        options.xaxis.timeformat = "%Y";
+                        break;
+                }            }
             break;
         case 'artist':
             sortMethod = sortByArtist;
