@@ -18,6 +18,8 @@ var spotifyPull = [{"listening_date":1537134884326,"track":{"album":{"album_type
 
 var viewsEnum = Object.freeze({"day": 86400000, "week": 604800000, "month": 2592000000,"year":31540000000}), //Enum to help sort date based on current view
     viewComp = viewsEnum.day,
+    modeEnum = Object.freeze({"line": "line", "pie": "pie", "bar": "bar"}),
+    mode = modeEnum.bar,
     numberSongsData = [],
     artistsBreakdown = [], //A breakdown consists of the four top results and the combined weight of all other categories.
     titlesBreakdown = [],
@@ -119,8 +121,8 @@ function sortByTime() {
 
 
 function sortByArtist() {
-    artistsData = [];
-    artistsInData = [];
+    var artistsData = [];
+    var artistsInData = [];
 
     var comparatorFunc = function(artist1, artist2) {
         if (artist1 == artist2)
@@ -132,7 +134,7 @@ function sortByArtist() {
 
     for (i=0; i < spotifyPull.length; i++) {
         var exists = false;
-        var artist = spotifyPull[i].track.artists.name;
+        var artist = spotifyPull[0].track.album.artists[0].name;
         for (var j = 0; j < artistsData.length; j++) {
             if (comparatorFunc(artistsInData[j], artist)) {
                 artistsData[j][1]++;
@@ -164,7 +166,51 @@ function sortByArtist() {
     artistsBreakdown = [artistsData[0], artistsData[1], artistsData[2], artistsData[3], ["Other", otherCount]];
 }
 
-function sortByTitle() {return null;} //Implement
+function sortByTitle() {
+    var titleData = [];
+    var titleInData = [];
+
+    var comparatorFunc = function(title1, title2) {
+        if (title1 == title2)
+            {return true;}
+        else
+            {return false;}
+    }
+
+
+    for (i=0; i < spotifyPull.length; i++) {
+        var exists = false;
+        var title = spotifyPull[i].track.name;
+        for (var j = 0; j < titleData.length; j++) {
+            if (comparatorFunc(titleInData[j], title)) {
+                titleData[j][1]++;
+                exists = true;
+                break;
+            }
+        }
+        if (!exists) {
+            titleData.push([title, 1]);
+            titleInData.push(title);
+        }
+    }
+
+    //var topFourArtists = []; //To prevent an unviewable amount of data this algo picks out the top four Artists
+    // for(i=0;i<artistsInData.length;i++) {
+    //     for (j=0;j<topFourArtists;j++) {
+    //         if(topFourArtists[j][1] <
+    //     }
+    // }
+    var compareTitles = function(a, b) {
+        return a[1] - b[1];
+    }
+    titleData.sort(compareTitles); //should sort the array by amount of listens to an artist
+
+    var otherCount = 0;
+    for (i=4;i<titleData.length;i++) {
+        otherCount += titleData[i][1];
+    }
+    titlesBreakdown = [titleData[0], titleData[1], titleData[2], titleData[3], ["Other", otherCount]];
+} //Implement
 
 var sortMethod = function() {return null;};
 
@@ -181,6 +227,15 @@ var barOptions = {
             barWidth: viewComp,
             align: "left"
         },
+        lines: {
+            show: false,
+            fill: true
+        },
+        pie: {
+            show: false,
+            radius: .8,
+            innerRadius: .5
+        }
     },
     legend: {
         show: false
@@ -201,6 +256,17 @@ var lineOptions = {
         lines: {
             show: true,
             fill: true
+        },
+        bars: {
+            show: false,
+            fill: true,
+            barWidth: viewComp,
+            align: "left"
+        },
+        pie: {
+            show: false,
+            radius: .8,
+            innerRadius: .5
         }
     },
     legend: {
@@ -223,6 +289,16 @@ var pieOptions = {
             show: true,
             radius: .8,
             innerRadius: .5
+        },
+        lines: {
+            show: false,
+            fill: true
+        },
+        bars: {
+            show: false,
+            fill: true,
+            barWidth: viewComp,
+            align: "left"
         }
     },
     legend: {
@@ -256,12 +332,15 @@ function switchChart(chartType, toSwitchOff) {
     switch (chartType) {
         case 'bar':
             options = barOptions;
+            mode = modeEnum.bar;
             break;
         case 'pie':
             options = pieOptions;
+            mode = modeEnum.pie;
             break;
         case 'line':
             options = lineOptions;
+            mode = modeEnum.line;
             break;
     }
 }
@@ -274,21 +353,27 @@ function switchFilter(filterType, toSwitchOff) {
         case 'none':
             sortMethod = sortByTime;
             rawData = numberSongsData;
-            options.xaxis.mode = "time";
-            options.xaxis.timeformat = "%d/%m/%Y";
+            if (mode != 'pie') {
+                options.xaxis.mode = "time";
+                options.xaxis.timeformat = "%d/%m/%Y";
+            }
             break;
         case 'artist':
             sortMethod = sortByArtist;
             rawData = artistsBreakdown;
-            options.xaxis.mode = null;
-            options.xaxis.timeformat = null;
+            if (mode != 'pie') {
+                options.xaxis.mode = null;
+                options.xaxis.timeformat = null;
+            }
             console.log("Sort by Artist Under Construction");
             break;
         case 'title':
             sortMethod = sortByTitle;
             rawData = titlesBreakdown;
-            options.xaxis.mode = null;
-            options.xaxis.timeformat = null;
+            if (mode != 'pie') {
+                options.xaxis.mode = null;
+                options.xaxis.timeformat = null;
+            }
             console.log("Sort by Song Title Under Construction");
             break;
     }
@@ -318,24 +403,24 @@ function visualizeDataset() {
         }
     ];
 
-    options.xaxis.min = defaultMin;
-    options.xaxis.max = defaultMax;
+    if(mode != "pie") {
+        options.xaxis.min = defaultMin;
+        options.xaxis.max = defaultMax;
+        options.xaxis.minTickSize = [1, viewSwitchedOff.substring(7)];
+        options.series.bars.barWidth = viewComp;
+    }
     var fromDateField = document.getElementById("fromDateField");
     var toDateField = document.getElementById("toDateField");
     if (fromDateField) {
-        if (fromDateField.value) {
+        if (fromDateField.value && mode != "pie") {
             options.xaxis.min = convertDateToNumber(fromDateField.value);
         }
     }
     if (toDateField) {
-        if (toDateField.value) {
+        if (toDateField.value && mode != "pie") {
             options.xaxis.max = convertDateToNumber(toDateField.value);
         }
     }
-
-    options.xaxis.minTickSize = [1, viewSwitchedOff.substring(7)];
-    options.series.bars.barWidth = viewComp;
-
     $.plot($("#graph-placeholder"), dataset, options);
 }
 
