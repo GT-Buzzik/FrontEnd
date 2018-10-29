@@ -158,6 +158,35 @@ input {
 }
 
 
+#help {
+	background-color: rgba(192, 192, 192, 0.5);
+	position: fixed;
+	bottom: 0;
+	top: 0;
+	right: 0;
+	left: 0;
+}
+
+#help-popup {
+	background-color: white;
+	
+	border-radius: 3px;
+	
+	position: fixed;
+	bottom: 10%;
+	top: 10%;
+	right: 20%;
+	left: 20%;
+}
+
+#help-popup #title {
+	color: #fcb913;
+	
+	position: absolute;
+	
+}
+
+
 
 .enlarged {
 	font-size: 24px;
