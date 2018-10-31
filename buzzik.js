@@ -206,7 +206,6 @@ function sortByTitle() {
         otherCount += titleData[i][1];
     }
     titlesBreakdown = [titleData[0], titleData[1], titleData[2], titleData[3], ["Other", otherCount]];
-    console.log(titlesBreakdown);
     return titlesBreakdown;
 } //Implement
 
@@ -463,6 +462,21 @@ function openHelp() {
         helpModal.style.display = "none";
     }
   }
+}
+
+//Accordion Help Menu
+var acc = document.getElementsByClassName("accordion");
+
+function expandPanel(id) {
+        var element = document.getElementById(id);
+        element.classList.toggle("active");
+        console.log("working");
+        var panel = element.nextElementSibling;
+        if (panel.style.display ==="block") {
+            panel.style.display = "none";
+        } else {
+            panel.style.display = "block";
+        }
 }
 
 $(document).ready(function () {
