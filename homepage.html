@@ -20,7 +20,9 @@
 		<div id="sidebar-left" class="sidebar">
 
 			<!-- TODO the help icon -->
-			<div id="buzzik-help"></div>
+			<div id="buzzik-help">
+				<img src="buzzik.png" id="helpBtn" class="help-btn" onclick="openHelp()" />
+			</div>
 
 			<div id="graph-control-title" class="yellow">
 				<div class="emboldend enlarged left-15 center-vert">Filtering Options:</div>
@@ -130,16 +132,14 @@
 			</div>
 		</div>
 	</section>
-	
-	<section>
-		<div id="help">
-			<div id="help-popup">
-				
-				<div id="title">BUZZIK HELP!</div>
-				
-			</div>
-		</div>
-	</section>
 
+	<div id="helpModal" class="help-Modal">
+		<div class="help-Modal-Content">
+			<span id="closeBtn" class="close-btn">&times;</span>
+			<p>
+				help
+			</p>
+		</div>
+	</div>
 </body>
 </html>
