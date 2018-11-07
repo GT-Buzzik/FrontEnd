@@ -45,6 +45,9 @@ function compareYear(date1, date2) {
     return date1.getFullYear() == date2.getFullYear();
 }
 
+var dateCompareFunc = compareDay;
+
+
 function standardizeDay(date) {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
@@ -59,30 +62,12 @@ function standardizeYear(date) {
     return new Date(date.getFullYear(), 0);
 }
 
+var dateStandardizeFunc = standardizeDay;
+
+
 function sortByTime() {
     numberSongsData = [];
     numberSongsDataDates = [];
-
-    var comparatorFunc = function(date1, date2) { return false; };
-    var standardizeFunc = function(date) { return Date.now(); };
-    switch (viewComp) {
-        case viewsEnum.day:
-            comparatorFunc = compareDay;
-            standardizeFunc = standardizeDay;
-            break;
-        case viewsEnum.week:
-            comparatorFunc = compareWeek;
-            standardizeFunc = standardizeWeek;
-            break;
-        case viewsEnum.month:
-            comparatorFunc = compareMonth;
-            standardizeFunc = standardizeMonth;
-            break;
-        case viewsEnum.year:
-            comparatorFunc = compareYear;
-            standardizeFunc = standardizeYear;
-            break;
-    }
 
     for (i=0; i < spotifyPull.length; i++) {
         var exists = false;
@@ -91,31 +76,18 @@ function sortByTime() {
         var date = new Date(dateTime);
         var exists = false;
         for (var j = 0; j < numberSongsData.length; j++) {
-            if (comparatorFunc(numberSongsDataDates[j], date)) {
+            if (dateCompareFunc(numberSongsDataDates[j], date)) {
                 numberSongsData[j][1]++;
                 exists = true;
                 break;
             }
         }
         if (!exists) {
-            var standardDate = standardizeFunc(date);
+            var standardDate = dateStandardizeFunc(date);
 
             numberSongsData.push([standardDate.valueOf(), 1]);
             numberSongsDataDates.push(standardDate);
         }
-
-        /*
-        date = Math.floor(dateTime / viewComp);
-        for (j = 0; j < numberSongsData.length; j++) {
-            if (Math.floor(numberSongsData[j][0] / viewComp) == date) {
-                numberSongsData[j][1] = numberSongsData[j][1] + 1;
-                exists = true;
-            }
-        }
-        if (exists == false) {
-            numberSongsData.push([dateTime, 1]);
-        }
-        */
     }
     return numberSongsData;
 }
@@ -213,6 +185,37 @@ var sortMethod = function() {return null;};
 
 sortMethod = sortByTime; //default value
 
+
+/* Generates the ticks for the x-axis, because the auto-generated ones do it wrong */
+function generateTicks(axis) {
+
+	// estimate number of possible ticks between start and end
+	var noTicks = Math.floor((axis.max - axis.min) / viewComp) - 1;
+	var mag = Math.ceil(noTicks / 10);
+	
+	var ticks = [],
+		v = dateStandardizeFunc(new Date(axis.max));
+	
+	do {
+		switch (viewComp) {
+			case viewsEnum.day:
+				v.setDate(v.getDate() - mag);
+				break;
+			case viewsEnum.month:
+				v.setMonth(v.getMonth() - mag);
+				break;
+			case viewsEnum.year:
+				v.setFullYear(v.getFullYear() - mag);
+				break;
+		}
+		ticks.push(v.valueOf());
+	} while (v.valueOf() > axis.min);
+	
+	ticks.pop();
+	return ticks;
+}
+
+
 var rawData = sortMethod();
 var options = null;
 var barOptions = {
@@ -238,8 +241,8 @@ var barOptions = {
     },
     xaxis: {
         mode: "time",
-        timeformat: "%d/%m/%Y",
-        ticks: rawData.length + 1,
+        timeformat: "%m/%d/%Y",
+        ticks: generateTicks,
         minTickSize: [1, viewSwitchedOff.substring(7)],
         tickColor: "#ababab"
     },
@@ -271,7 +274,7 @@ var lineOptions = {
     },
     xaxis: {
         mode: "time",
-        timeformat: "%d/%m/%Y",
+        timeformat: "%m/%d/%Y",
         ticks: rawData.length,
         minTickSize: [1, viewSwitchedOff.substring(7)],
         tickColor: "#ababab"
@@ -316,12 +319,18 @@ function switchView(timeformat, toSwitchOff) {
     viewSwitchedOff = toSwitchOff;
     if (toSwitchOff == "select-day") {
         viewComp = viewsEnum.day;
+		dateCompareFunc = compareDay;
+		dateStandardizeFunc = standardizeDay;
     } else if (toSwitchOff == "select-week") {
         viewComp = viewsEnum.week;
     } else if (toSwitchOff == "select-month") {
         viewComp = viewsEnum.month;
+		dateCompareFunc = compareMonth;
+		dateStandardizeFunc = standardizeMonth;
     } else if (toSwitchOff == "select-year") {
         viewComp = viewsEnum.year;
+		dateCompareFunc = compareYear;
+		dateStandardizeFunc = standardizeYear;
     }
 }
 
