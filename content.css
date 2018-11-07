@@ -252,6 +252,7 @@ input {
 	height: 100%;
 	margin: auto;
 	display: flex;
+	cursor: pointer;
 }
 
 .help-Modal {
@@ -302,7 +303,8 @@ input {
     transition: 0.4s;
 }
 .active, .accordion:hover {
-    background-color: #ccc;
+    background-color: #0d97ff;
+		color: white;
 }
 .panel {
     padding: 0 18px;
@@ -326,4 +328,12 @@ input {
 	color: #fcb913;
 	font-weight: bold;
 	font-size: 50px;
+}
+
+.help-text {
+	font-weight: bold;
+	font-size: 20px;
+}
+
+.help-ans {
 }
