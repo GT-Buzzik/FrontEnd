@@ -126,10 +126,15 @@
 
 			<div id="options-container">
 				<button class="btn btn-6">Export</button>
-				<button class="btn btn-6">Upload</button>
+				<button class="btn btn-6" onclick="document.getElementById('csv-calendar-upload').click();">Upload Calendar</button>
+				<!-- <button class="btn btn-6">Upload</button> -->
 				<button class="btn btn-6">Night</button>
 				<button class="btn btn-6 red">Logout</button>
 			</div>
+			
+			<form enctype="multipart/form-data" action="/upload/calendar" method="post">
+				<input id="csv-calendar-upload" type="file" accept=".csv" style="display:none;" />
+			</form>
 		</div>
 	</section>
 
