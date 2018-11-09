@@ -7,6 +7,7 @@
 	<link rel="stylesheet" type="text/css" href="content.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript" src="jquery.csv.js"></script>
     <script type="text/javascript" src="jquery.flot.js"></script>
     <script type="text/javascript" src="jquery.flot.time.js"></script>
     <script type="text/javascript" src="jquery.flot.pie.js"></script>
@@ -126,7 +127,7 @@
 
 			<div id="options-container">
 				<button class="btn btn-6">Export</button>
-				<button class="btn btn-6" onclick="document.getElementById('csv-calendar-upload').click();">Upload Calendar</button>
+				<button class="btn btn-6" onclick="openImportCalendarCsvFileDialog();">Upload Calendar</button>
 				<!-- <button class="btn btn-6">Upload</button> -->
 				<button class="btn btn-6">Night</button>
 				<button class="btn btn-6 red">Logout</button>

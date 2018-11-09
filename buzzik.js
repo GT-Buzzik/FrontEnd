@@ -459,6 +459,55 @@ function visualizeDataset() {
     $.plot($("#graph-placeholder"), dataset, options);
 }
 
+
+/* Import calendar */
+function openImportCalendarCsvFileDialog() {
+	var fileInput = document.getElementById('csv-calendar-upload');
+	
+	fileInput.onchange = function(e) {
+		for (var i = 0; i < e.target.files.length; i++) {
+			var file = e.target.files[i];
+			var reader = new FileReader();
+			
+			reader.onloadend = (function(f) {
+				return function(e) {
+					var data = $.csv.toObjects(e.target.result);
+					/* data is an array of objects, where each element in the array represents 
+						a line in the csv file, and each parameter in the object represents
+						an element in the line
+						
+						EXAMPLE
+						
+						file.csv
+							
+							Header1,Header2,Header3
+							1,2,3
+							4,5,6
+							
+						data = [
+							{
+								"Header1": "1",
+								"Header2": "2",
+								"Header3": "3"
+							},
+							{
+								"Header1": "4",
+								"Header2": "5",
+								"Header3": "6"
+							}
+						];
+					*/
+				};
+			})(file);
+			
+			reader.readAsText(file);
+		}
+	}
+	
+	fileInput.click();
+}
+
+
 function openHelp() {
   var helpModal = document.getElementById("helpModal");
   var closeBtn = document.getElementById("closeBtn");
