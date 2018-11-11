@@ -124,7 +124,7 @@ function compareWeek(date1, date2) {
     return compareDay(date1, date2);
 }
 function compareMonth(date1, date2) {
-    return (date1.getMonth() == date2.getMonth()) && (Math.abs(date1.valueOf() - date2.valueOf()) < viewsEnum.month);
+    return (date1.getMonth() == date2.getMonth()) && (date1.getFullYear() == date2.getFullYear());
 }
 function compareYear(date1, date2) {
     return date1.getFullYear() == date2.getFullYear();
@@ -178,7 +178,7 @@ function sortByTime() {
 }
 
 
-function sortByArtist() {
+/* function sortByArtist() {
     var artistsData = [];
     var artistsInData = [];
 
@@ -223,7 +223,7 @@ function sortByArtist() {
     }
     artistsBreakdown = [artistsData[0], artistsData[1], artistsData[2], artistsData[3], ["Other", otherCount]];
     return artistsBreakdown;
-}
+} */
 
 function sortByTitle() {
     var titleData = [];
