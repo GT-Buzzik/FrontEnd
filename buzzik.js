@@ -544,6 +544,64 @@ function visualizeDataset() {
     $.plot($("#graph-placeholder"), dataset, options);
 }
 
+
+function openImportCalendar() {
+    var fileInput = document.getElementById('csv-ics-calendar-upload');
+    
+    fileInput.onchange = function(e) {
+        for (var i = 0; i < e.target.files.length; i++) {
+            var file = e.target.files[i];
+            var reader = new FileReader();
+            
+            reader.onloadend = (function(f) {
+                var extension = f.name.slice(f.name.length - 4, f.name.length);
+                if (extension == '.csv'){
+                    return function(e) {
+                        var data = $.csv.toObjects(e.target.result);
+                        //document.write(JSON.stringify(data));
+                         /*data is an array of objects, where each element in the array represents 
+                            a line in the csv file, and each parameter in the object represents
+                            an element in the line
+                            
+                            EXAMPLE
+                            
+                            file.csv
+                                
+                                Header1,Header2,Header3
+                                1,2,3
+                                4,5,6
+                                
+                            data = [
+                                {
+                                    "Header1": "1",
+                                    "Header2": "2",
+                                    "Header3": "3"
+                                },
+                                {
+                                    "Header1": "4",
+                                    "Header2": "5",
+                                    "Header3": "6"
+                                }
+                            ];*/
+                        
+                    };
+                } else if (extension == '.ics'){
+                    return function(e) {
+                        var data = ICAL.parse(e.target.result);
+                        //data = data.toJSON();
+                        //document.write(JSON.stringify(data));
+                    };
+                }
+            })(file);
+            
+            reader.readAsText(file);
+        }
+    }
+    
+    fileInput.click();
+
+}
+
 function openHelp() {
   var helpModal = document.getElementById("helpModal");
   var closeBtn = document.getElementById("closeBtn");
