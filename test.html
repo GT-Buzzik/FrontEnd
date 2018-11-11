@@ -27,7 +27,7 @@ function getBackendData(endpoint, parms) {
         // async: true,
         crossDomain: true,
         data: parms,
-        dataType: "jsonp",
+        // dataType: "jsonp",
         // "Access-Control-Allow-Origin": "*",
         headers: {
             "Access-Control-Allow-Origin": Url
@@ -38,7 +38,7 @@ function getBackendData(endpoint, parms) {
         },
         error:function(error){
             console.log('Error ', error);
-            return null;
+            return error;
         }
     });
 }
@@ -98,17 +98,17 @@ function deleteUser(user_id) {
 
 
 function test1() {
-    console.log(updateUserNotificationPeriod(testUser, "day"));
+    // console.log(updateUserNotificationPeriod(testUser, "day"));
     // console.log(getNotificationPeriod(testUser));
-    // console.log(updateUserNotificationPeriod(testUser, "month"));
+    console.log(updateUserNotificationPeriod(testUser, "month"));
     // console.log(getNotificationPeriod(testUser));
 }
 
 function test2() {
     // console.log(updateUserNotificationPeriod(testUser, "day"));
-    console.log(getNotificationPeriod(testUser));
-    // console.log(updateUserNotificationPeriod(testUser, "month"));
     // console.log(getNotificationPeriod(testUser));
+    // console.log(updateUserNotificationPeriod(testUser, "month"));
+    console.log(getNotificationPeriod(testUser));
     // console.log(getListeningHistorySingleUser(testUser));
 }
 
