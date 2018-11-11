@@ -21,46 +21,48 @@ const testUser = 'spotify:user:genaricname';
 
 
 function getBackendData(endpoint, parms) {
+    var tmp;
     $.ajax({
         url:Url + endpoint,
         type:"GET",
-        // async: true,
+        async: false,
         crossDomain: true,
         data: parms,
-        // dataType: "jsonp",
-        // "Access-Control-Allow-Origin": "*",
         headers: {
             "Access-Control-Allow-Origin": Url
         },
         success: function(result) {
             console.log("Get request success: ", result);
-            return result;
+            tmp = result;
         },
         error:function(error){
             console.log('Error ', error);
-            return error;
+            tmp = error;
         }
     });
+    return tmp;
 }
 
 function postToBackend(endpoint, parms, body) {
+    var tmp;
     $.ajax({
         url: Url + endpoint + '?' + jQuery.param(parms),
         type: "POST",
         crossDomain: true,
-        // dataType: "jsonp", // Only works with GET requests
+        async: false,
         "headers": {
             'Access-Control-Allow-Origin': '*',
         },
-        // data: jQuery.param(parms),
         success: function(result) {
             console.log("Post request success: ", result);
-            return result;
+            tmp = result;
         },
         error: function(error) {
             console.error('Post request error: ', error);
+            tmp = error;
         }
     });
+    return tmp;
 }
 
 function getListeningHistorySingleUser(user_id) {
@@ -88,28 +90,17 @@ function updateUserNotificationPeriod(user_id, period) {
     return postToBackend('store_user_notification_frequency', {id: user_id, notification_frequency: period});
 }
 
-// function updateUserFacultyStatus(user_id, is_faculty) {
-//     return postToBackend('store_faculty_status', {id: user_id, faculty_status: is_faculty});
-// }
-
 function deleteUser(user_id) {
     return postToBackend('delete_user', {id: user_id});
 }
 
 
 function test1() {
-    // console.log(updateUserNotificationPeriod(testUser, "day"));
-    // console.log(getNotificationPeriod(testUser));
     console.log(updateUserNotificationPeriod(testUser, "month"));
-    // console.log(getNotificationPeriod(testUser));
 }
 
 function test2() {
-    // console.log(updateUserNotificationPeriod(testUser, "day"));
-    // console.log(getNotificationPeriod(testUser));
-    // console.log(updateUserNotificationPeriod(testUser, "month"));
     console.log(getNotificationPeriod(testUser));
-    // console.log(getListeningHistorySingleUser(testUser));
 }
 
 </script>
