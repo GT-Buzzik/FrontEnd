@@ -99,7 +99,7 @@ spotifyPull = [
 
 // Use this call to get data from api.
 // var spotifyPull = [];
-// spotifyPull = getListeningHistorySingleUser(testUser).Items;
+spotifyPull = getListeningHistorySingleUser(testUser).Items;
 
 var viewsEnum = Object.freeze({"day": 86400000, "week": 604800000, "month": 2592000000,"year":31540000000}), //Enum to help sort date based on current view
     viewComp = viewsEnum.day,
@@ -257,12 +257,12 @@ function sortByTitle() {
         return b[1] - a[1];
     }
     titleData.sort(compareTitles); //should sort the array by amount of listens to a song
-
-    var otherCount = 0;
-    for (i=4;i<titleData.length;i++) {
-        otherCount += titleData[i][1];
-    }
-    titlesBreakdown = [titleData[0], titleData[1], titleData[2], titleData[3], ["Other", otherCount]];
+    titlesBreakdown = titleData;
+    // var otherCount = 0;
+    // for (i=4;i<titleData.length;i++) {
+    //     otherCount += titleData[i][1];
+    // }
+    // titlesBreakdown = [titleData[0], titleData[1], titleData[2], titleData[3], ["Other", otherCount]];
     return titlesBreakdown;
 } //Implement
 
@@ -547,30 +547,30 @@ function visualizeDataset() {
 
 function openImportCalendar() {
     var fileInput = document.getElementById('csv-ics-calendar-upload');
-    
+
     fileInput.onchange = function(e) {
         for (var i = 0; i < e.target.files.length; i++) {
             var file = e.target.files[i];
             var reader = new FileReader();
-            
+
             reader.onloadend = (function(f) {
                 var extension = f.name.slice(f.name.length - 4, f.name.length);
                 if (extension == '.csv'){
                     return function(e) {
                         var data = $.csv.toObjects(e.target.result);
                         //document.write(JSON.stringify(data));
-                         /*data is an array of objects, where each element in the array represents 
+                         /*data is an array of objects, where each element in the array represents
                             a line in the csv file, and each parameter in the object represents
                             an element in the line
-                            
+
                             EXAMPLE
-                            
+
                             file.csv
-                                
+
                                 Header1,Header2,Header3
                                 1,2,3
                                 4,5,6
-                                
+
                             data = [
                                 {
                                     "Header1": "1",
@@ -583,21 +583,30 @@ function openImportCalendar() {
                                     "Header3": "6"
                                 }
                             ];*/
-                        
+
                     };
                 } else if (extension == '.ics'){
                     return function(e) {
                         var data = ICAL.parse(e.target.result);
-                        //data = data.toJSON();
+                        // data = data.toJSON();
                         //document.write(JSON.stringify(data));
+
+                        var values = [];
+                        data[2].forEach((e) => {
+                            values = values.concat([{
+                                summary: e[1][10][3],
+                                time: new Date(e[1][0][3])
+                            }]);
+                        })
+                        console.log("calendar: ", values);
                     };
                 }
             })(file);
-            
+
             reader.readAsText(file);
         }
     }
-    
+
     fileInput.click();
 
 }
