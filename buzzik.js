@@ -371,7 +371,9 @@ var barOptions = {
         tickColor: "#ababab"
     },
     yaxis: {
+        min: 0,
         tickDecimals: 0,
+        tickColor: "#ababab"
     }
 };
 
