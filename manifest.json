@@ -1,0 +1,14 @@
+{
+ "manifest_version": 2,
+ "name": "Buzzik",
+ "description": "Music Data Visualization App for Spotify Listening History",
+ "version": "1",
+ "author": "Thatcher Freeman",
+"browser_action": {
+   "default_title": "Buzzik Music Visualization"
+ },
+"chrome_url_overrides" : {
+  "newtab": "login.html"
+},
+ "permissions": ["activeTab"]
+}
