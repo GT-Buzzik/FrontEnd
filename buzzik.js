@@ -98,7 +98,6 @@ spotifyPull = [
 ];
 
 // Use this call to get data from api.
-// var spotifyPull = [];
 spotifyPull = getListeningHistorySingleUser(testUser).Items;
 
 var viewsEnum = Object.freeze({"day": 86400000, "week": 604800000, "month": 2592000000,"year":31540000000}), //Enum to help sort date based on current view
@@ -114,6 +113,31 @@ var viewsEnum = Object.freeze({"day": 86400000, "week": 604800000, "month": 2592
 var viewSwitchedOff = "select-day";
 var chartSwitchedOff = "select-bar";
 var filterSwitchedOff = "select-none";
+
+
+var options = null;
+var filters = {
+    range: {
+        min: null,
+        max: null
+    }
+};
+
+function filterData(data) {
+	if (filters.range.min) {
+		if (data.listening_date < filters.range.min) {
+			return false;
+		}
+	}
+	if (filters.range.max) {
+		if (data.listening_date > filters.range.max) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
 
 
 function compareDay(date1, date2) {
@@ -151,29 +175,34 @@ var dateStandardizeFunc = standardizeDay;
 
 
 function sortByTime() {
-    numberSongsData = [];
+	numberSongsData = [];
     numberSongsDataDates = [];
 
     for (i=0; i < spotifyPull.length; i++) {
-        var exists = false;
-        var dateTime = spotifyPull[i].listening_date;
+        if (filterData(spotifyPull[i])) {
 
-        var date = new Date(dateTime);
-        var exists = false;
-        for (var j = 0; j < numberSongsData.length; j++) {
-            if (dateCompareFunc(numberSongsDataDates[j], date)) {
-                numberSongsData[j][1]++;
-                exists = true;
-                break;
-            }
-        }
-        if (!exists) {
-            var standardDate = dateStandardizeFunc(date);
+			var exists = false;
+			var dateTime = spotifyPull[i].listening_date;
 
-            numberSongsData.push([standardDate.valueOf(), 1]);
-            numberSongsDataDates.push(standardDate);
-        }
+			var date = new Date(dateTime);
+			var exists = false;
+			for (var j = 0; j < numberSongsData.length; j++) {
+				if (dateCompareFunc(numberSongsDataDates[j], date)) {
+					numberSongsData[j][1]++;
+					exists = true;
+					break;
+				}
+			}
+			if (!exists) {
+				var standardDate = dateStandardizeFunc(date);
+
+				numberSongsData.push([standardDate.valueOf(), 1]);
+				numberSongsDataDates.push(standardDate);
+			}
+
+		}
     }
+
     return numberSongsData;
 }
 
@@ -238,19 +267,23 @@ function sortByTitle() {
 
 
     for (i=0; i < spotifyPull.length; i++) {
-        var exists = false;
-        var title = spotifyPull[i].track_name;
-        for (var j = 0; j < titleData.length; j++) {
-            if (comparatorFunc(titleInData[j], title)) {
-                titleData[j][1]++;
-                exists = true;
-                break;
-            }
-        }
-        if (!exists) {
-            titleData.push([title, 1]);
-            titleInData.push(title);
-        }
+		if (filterData(spotifyPull[i])) {
+
+			var exists = false;
+			var title = spotifyPull[i].track_name;
+			for (var j = 0; j < titleData.length; j++) {
+				if (comparatorFunc(titleInData[j], title)) {
+					titleData[j][1]++;
+					exists = true;
+					break;
+				}
+			}
+			if (!exists) {
+				titleData.push([title, 1]);
+				titleInData.push(title);
+			}
+
+		}
     }
 
     var compareTitles = function(a, b) {
@@ -297,12 +330,18 @@ function generateTicks(axis) {
 	} while (v.valueOf() > axis.min);
 
 	ticks.pop();
+
+	if (ticks.length == 0) {
+		ticks.push(axis.min);
+		ticks.push(axis.max);
+	}
+
 	return ticks;
 }
 
 
 var rawData = sortMethod();
-var options = null;
+
 var barOptions = {
     series: {
         bars: {
@@ -450,7 +489,7 @@ function switchFilter(filterType, toSwitchOff) {
                 options.xaxis.mode = "time";
                 switch (viewComp) {
                     case viewsEnum.day:
-                        options.xaxis.timeformat = "%d/%m/%Y";
+                        options.xaxis.timeformat = "%m/%d/%Y";
                         break;
                     case viewsEnum.month:
                         options.xaxis.timeformat = "%m/%Y";
@@ -458,7 +497,8 @@ function switchFilter(filterType, toSwitchOff) {
                     case viewsEnum.year:
                         options.xaxis.timeformat = "%Y";
                         break;
-                }            }
+                }
+			}
             break;
         case 'artist':
             sortMethod = sortByArtist;
@@ -490,57 +530,87 @@ function convertDateToNumber(text) {
 
 
 function visualizeDataset() {
+    // collect date range
+
+    filters.range = {
+        min: defaultMin,
+        max: defaultMax
+    };
+
+    var fromDateField = document.getElementById("fromDateField");
+    var toDateField = document.getElementById("toDateField");
+    if (fromDateField) {
+        if (fromDateField.value) {
+            filters.range.min = convertDateToNumber(fromDateField.value);
+        }
+    }
+    if (toDateField) {
+        if (toDateField.value) {
+            filters.range.max = convertDateToNumber(toDateField.value);
+        }
+    }
+
     // construct raw data
     rawData = sortMethod();
 
 
     // fill in dataset and plot
-
-
     if (mode != "pie") {
-        options.xaxis.min = defaultMin;
-        options.xaxis.max = defaultMax;
+        options.xaxis.min = filters.range.min;
+        options.xaxis.max = filters.range.max;
         options.xaxis.minTickSize = [1, viewSwitchedOff.substring(7)];
         dataset = [
-        {
-            data: rawData
-        }
-    ];
+			{
+				data: rawData
+			}
+		];
     } else {
         dataset = [];
         for (i=0;i<rawData.length;i++) {
+            if (rawData[i] != null) {
+                dataset.push(
+                    {
+                        label: rawData[i][0],
+                        data: rawData[i][1]
+                    }
+                );
+            }
+            /*
             if (rawData[i] != null && sortMethod == sortByTime) {
                 dataset.push({label: new Date(rawData[i][0]), data: rawData[i][1]});
             } else if (rawData[i] != null) {
                 dataset.push({label: rawData[i][0], data: rawData[i][1]});
             }
+            */
         }
     }
 
-    if (mode == "bar" && options.xaxis.mode != 'time') {
-        var ticks = [];
-        for (i=0; i<rawData.length;i++) {
-            if (rawData[i] != null) {
-                ticks.push([i, rawData[i][0]]);
-            }
-        }
-        console.log(ticks);
-        options.xaxis.ticks = ticks;
-        options.series.bars.barWidth = viewComp;
+	if (mode == "bar") {
+		if (options.xaxis.mode != 'time') {
+			var ticks = [];
+			for (i=0; i<rawData.length;i++) {
+				if (rawData[i] != null) {
+					ticks.push([i, rawData[i][0]]);
+				}
+			}
+			console.log(ticks);
+			options.xaxis.ticks = ticks;
+		} else {
+			switch (viewComp) {
+				case viewsEnum.day:
+					options.xaxis.timeformat = "%m/%d/%Y";
+					break;
+				case viewsEnum.month:
+					options.xaxis.timeformat = "%m/%Y";
+					break;
+				case viewsEnum.year:
+					options.xaxis.timeformat = "%Y";
+					break;
+			}
+			options.series.bars.barWidth = viewComp;
+		}
     }
 
-    var fromDateField = document.getElementById("fromDateField");
-    var toDateField = document.getElementById("toDateField");
-    if (fromDateField) {
-        if (fromDateField.value && mode != "pie") {
-            options.xaxis.min = convertDateToNumber(fromDateField.value);
-        }
-    }
-    if (toDateField) {
-        if (toDateField.value && mode != "pie") {
-            options.xaxis.max = convertDateToNumber(toDateField.value);
-        }
-    }
     $.plot($("#graph-placeholder"), dataset, options);
 }
 
