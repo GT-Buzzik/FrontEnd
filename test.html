@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    </head>
+<body>
+
+<h2>JavaScript in Body</h2>
+
+<p id="demo">A Paragraph.</p>
+
+<button type="button" onclick="test1()">POST</button>
+<button type="button" onclick="test2()">GET</button>
+
+<script>
+
+const Url = 'https://buzzik-cooperpellaton.c9users.io:8080/api/';
+const testUser = 'spotify:user:genaricname';
+
+
+function getBackendData(endpoint, parms) {
+    var tmp;
+    $.ajax({
+        url:Url + endpoint,
+        type:"GET",
+        async: false,
+        crossDomain: true,
+        data: parms,
+        headers: {
+            "Access-Control-Allow-Origin": Url
+        },
+        success: function(result) {
+            console.log("Get request success: ", result);
+            tmp = result;
+        },
+        error:function(error){
+            console.log('Error ', error);
+            tmp = error;
+        }
+    });
+    return tmp;
+}
+
+function postToBackend(endpoint, parms, body) {
+    var tmp;
+    $.ajax({
+        url: Url + endpoint + '?' + jQuery.param(parms),
+        type: "POST",
+        crossDomain: true,
+        async: false,
+        "headers": {
+            'Access-Control-Allow-Origin': '*',
+        },
+        success: function(result) {
+            console.log("Post request success: ", result);
+            tmp = result;
+        },
+        error: function(error) {
+            console.error('Post request error: ', error);
+            tmp = error;
+        }
+    });
+    return tmp;
+}
+
+function getListeningHistorySingleUser(user_id) {
+    return getBackendData('get_listening_history', {id: user_id});
+}
+
+function getUserInfo(user_id) {
+    return getBackendData('get_user', {id: user_id});
+}
+
+function getUserFacultyStatus(user_id) {
+    return getBackendData('get_faculty_status', {id: user_id});
+}
+
+function getNotificationPeriod(user_id) {
+    return getBackendData('get_user_notification_frequency', {id: user_id});
+}
+
+function getUserRawData(user_id) {
+    return getBackendData('get_raw_data', {id: user_id});
+}
+
+// Pass in one of "day", "month", "week", "never"
+function updateUserNotificationPeriod(user_id, period) {
+    return postToBackend('store_user_notification_frequency', {id: user_id, notification_frequency: period});
+}
+
+function deleteUser(user_id) {
+    return postToBackend('delete_user', {id: user_id});
+}
+
+
+function test1() {
+    console.log(updateUserNotificationPeriod(testUser, "month"));
+}
+
+function test2() {
+    console.log(getNotificationPeriod(testUser));
+}
+
+</script>
+
+</body>
+</html>
+
+
