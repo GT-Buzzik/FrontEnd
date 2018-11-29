@@ -98,7 +98,7 @@ spotifyPull = [
 ];
 
 // Use this call to get data from api.
-// spotifyPull = getListeningHistorySingleUser(testUser).Items;
+spotifyPull = getListeningHistorySingleUser(testUser).Items;
 
 var viewsEnum = Object.freeze({"day": 86400000, "week": 604800000, "month": 2592000000,"year":31540000000}), //Enum to help sort date based on current view
     viewComp = viewsEnum.day,
@@ -207,7 +207,7 @@ function sortByTime() {
 }
 
 
-/* function sortByArtist() {
+function sortByArtist() {
     var artistsData = [];
     var artistsInData = [];
 
@@ -221,7 +221,7 @@ function sortByTime() {
 
     for (i=0; i < spotifyPull.length; i++) {
         var exists = false;
-        var artist = spotifyPull[0].track.album.artists[0].name;
+        var artist = spotifyPull[i].artist;
         for (var j = 0; j < artistsData.length; j++) {
             if (comparatorFunc(artistsInData[j], artist)) {
                 artistsData[j][1]++;
@@ -252,7 +252,7 @@ function sortByTime() {
     }
     artistsBreakdown = [artistsData[0], artistsData[1], artistsData[2], artistsData[3], ["Other", otherCount]];
     return artistsBreakdown;
-} */
+}
 
 function sortByTitle() {
     var titleData = [];
@@ -723,7 +723,7 @@ document.getElementById("select-bar").addEventListener("click", () => {switchCha
 document.getElementById("select-pie").addEventListener("click", () => {switchChart("pie", "select-pie");});
 document.getElementById("select-line").addEventListener("click", () => {switchChart("line", "select-line");});
 document.getElementById("select-none").addEventListener("click", () => {switchFilter("none", "select-none");});
-// document.getElementById("select-artist").addEventListener("click", () => {switchFilter("artist", "select-artist");});
+document.getElementById("select-artist").addEventListener("click", () => {switchFilter("artist", "select-artist");});
 document.getElementById("select-title").addEventListener("click", () => {switchFilter("title", "select-title");});
 document.getElementById("graph-control-refine-btn").addEventListener("click", visualizeDataset);
 document.getElementById("open-calendar").addEventListener("click", openImportCalendar);
