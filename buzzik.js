@@ -98,7 +98,7 @@ spotifyPull = [
 ];
 
 // Use this call to get data from api.
-spotifyPull = getListeningHistorySingleUser(testUser).Items;
+// spotifyPull = getListeningHistorySingleUser(testUser).Items;
 
 var viewsEnum = Object.freeze({"day": 86400000, "week": 604800000, "month": 2592000000,"year":31540000000}), //Enum to help sort date based on current view
     viewComp = viewsEnum.day,
@@ -711,6 +711,30 @@ function expandPanel(id) {
             panel.style.display = "block";
         }
 }
+
+
+//Event listeners:
+document.getElementById("helpBtn").addEventListener("click", openHelp);
+document.getElementById("select-day").addEventListener("click", () => {switchView("%m/%d/%Y", "select-day");});
+// document.getElementById("select-week").addEventListener("click", () => {switchView("%m/%d/%Y", "select-week");});
+document.getElementById("select-month").addEventListener("click", () => {switchView("%m/%d/%Y", "select-month");});
+document.getElementById("select-year").addEventListener("click", () => {switchView("%m/%d/%Y", "select-year");});
+document.getElementById("select-bar").addEventListener("click", () => {switchChart("bar", "select-bar");});
+document.getElementById("select-pie").addEventListener("click", () => {switchChart("pie", "select-pie");});
+document.getElementById("select-line").addEventListener("click", () => {switchChart("line", "select-line");});
+document.getElementById("select-none").addEventListener("click", () => {switchFilter("none", "select-none");});
+// document.getElementById("select-artist").addEventListener("click", () => {switchFilter("artist", "select-artist");});
+document.getElementById("select-title").addEventListener("click", () => {switchFilter("title", "select-title");});
+document.getElementById("graph-control-refine-btn").addEventListener("click", visualizeDataset);
+document.getElementById("open-calendar").addEventListener("click", openImportCalendar);
+document.getElementById("opt1").addEventListener("click", () => {expandPanel("opt1");});
+document.getElementById("opt2").addEventListener("click", () => {expandPanel("opt2");});
+document.getElementById("opt3").addEventListener("click", () => {expandPanel("opt3");});
+document.getElementById("opt4").addEventListener("click", () => {expandPanel("opt4");});
+document.getElementById("opt5").addEventListener("click", () => {expandPanel("opt5");});
+
+
+
 
 $(document).ready(function () {
     document.getElementById(viewSwitchedOff).disabled = true;

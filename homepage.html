@@ -11,7 +11,7 @@
     <script type="text/javascript" src="jquery.flot.js"></script>
     <script type="text/javascript" src="jquery.flot.time.js"></script>
     <script type="text/javascript" src="jquery.flot.pie.js"></script>
-    <script type="text/javascript" src="buzzik.js"></script>
+
     <script type="text/javascript" src="ical.js"></script>
 </head>
 <body>
@@ -21,7 +21,7 @@
 
 			<!-- TODO the help icon -->
 			<div id="buzzik-help">
-				<img src="buzzik.png" id="helpBtn" class="help-btn" onclick="openHelp()" />
+				<img src="buzzik.png" id="helpBtn" class="help-btn"/>
 			</div>
 
 			<div id="graph-control-title" class="yellow">
@@ -35,16 +35,16 @@
 					<div class="spacer-10"></div>
 					<div class="left-15">
 						<div id="graph-control-view-selector" class="btn-group">
-							<button id="select-day" class="btn btn-4" value="day" onclick='switchView("%m/%d/%Y", "select-day")'>
+							<button id="select-day" class="btn btn-4" value="day">
 								Day
 							</button>
-							<!-- <button id="select-week" class="btn btn-4" value="week" onclick='switchView("%d/%m/%Y", "select-week")'>
+							<!-- <button id="select-week" class="btn btn-4" value="week">
 								Week
 							</button> -->
-							<button id="select-month" class="btn btn-4" value="month" onclick='switchView("%m/%Y", "select-month")'>
+							<button id="select-month" class="btn btn-4" value="month">
 								Month
 							</button>
-							<button id="select-year" class="btn btn-4" value="year" onclick='switchView("%Y", "select-year")'>
+							<button id="select-year" class="btn btn-4" value="year">
 								Year
 							</button>
 						</div>
@@ -78,13 +78,13 @@
 					<div class="separator-line"></div>
 					<div class="spacer-10"></div>
 					<div class="left-15">
-                        <button id="select-bar" class="btn btn-5" value="bar" onclick='switchChart("bar", "select-bar")'>
+                        <button id="select-bar" class="btn btn-5" value="bar">
                                 Bar Chart
                         </button>
-                        <button id="select-pie" class="btn btn-5" value="pie" onclick='switchChart("pie", "select-pie")'>
+                        <button id="select-pie" class="btn btn-5" value="pie">
                                 Pie Chart
                         </button>
-                        <button id="select-line" class="btn btn-5" value="line" onclick='switchChart("line", "select-line")'>
+                        <button id="select-line" class="btn btn-5" value="line">
                                 Line Chart
                         </button>
                     </div>
@@ -97,13 +97,13 @@
                     <div class="separator-line"></div>
                     <div class="spacer-10"></div>
                     <div class="left-15">
-                        <button id="select-none" class="btn btn-5" value="noFilter" onclick='switchFilter("none", "select-none")'>
+                        <button id="select-none" class="btn btn-5" value="noFilter">
                                 Date
                         </button>
-                        <!-- <button id="select-artist" class="btn btn-5" value="artist" onclick='switchFilter("artist", "select-artist")'>
+                        <!-- <button id="select-artist" class="btn btn-5" value="artist">
                                 Artist
                         </button> -->
-                        <button id="select-title" class="btn btn-5" value="title" onclick='switchFilter("title", "select-title")'>
+                        <button id="select-title" class="btn btn-5" value="title">
                                 Song Title
                         </button>
                     </div>
@@ -111,7 +111,7 @@
 			</div>
 
 			<div id="graph-control-refine">
-				<button id="graph-control-refine-btn" class="btn yellow" onclick="visualizeDataset();">
+				<button id="graph-control-refine-btn" class="btn yellow">
 					Refine
 				</button>
 			</div>
@@ -126,7 +126,7 @@
 
 			<div id="options-container">
 				<button class="btn btn-6">Export</button>
-				<button class="btn btn-6" onclick="openImportCalendar();">Upload Calendar</button>
+				<button id="open-calendar" class="btn btn-6">Upload Calendar</button>
 				<!-- <button class="btn btn-6">Upload</button> -->
 				<button class="btn btn-6">Night</button>
 				<button class="btn btn-6 red">Logout</button>
@@ -146,7 +146,7 @@
 	      <text style="margin-left:5px;"><b><i>Anything you might need to know you'll be able to find here on the Buzzik help page!</i></b></text>
 			</div>
 			<div class="help-ans">
-				<button id='opt1'class="accordion help-text"onclick='expandPanel("opt1");'>Refining Your Dataset</button>
+				<button id='opt1'class="accordion help-text">Refining Your Dataset</button>
 	      <div class="panel">
 	        <ul class="help-list">
 						<li>Select how you want to view the data
@@ -177,7 +177,7 @@
 						</li>
 					</ul>
 	      </div>
-	      <button id='opt2'class="accordion help-text"onclick='expandPanel("opt2");'>Toggling Dark Mode</button>
+	      <button id='opt2'class="accordion help-text">Toggling Dark Mode</button>
 	      <div class="panel">
 	          <ul class="help-list">
 	          	<li>
@@ -185,7 +185,7 @@
 							</li>
 	          </ul>
 	      </div>
-	      <button id='opt3'class="accordion help-text"onclick='expandPanel("opt3");'>Checking Your Account Info and Privileges</button>
+	      <button id='opt3'class="accordion help-text">Checking Your Account Info and Privileges</button>
 	      <div class="panel">
 	          <ul class="help-list">
 							<li>
@@ -193,7 +193,7 @@
 							</li>
 						</ul>
 	      </div>
-	      <button id='opt4'class="accordion help-text"onclick='expandPanel("opt4");'>Uploading Calendars</button>
+	      <button id='opt4'class="accordion help-text">Uploading Calendars</button>
 	      <div class="panel">
 					<ul class="help-list">
 						<li>
@@ -201,7 +201,7 @@
 						</li>
 					</ul>
 	      </div>
-	      <button id='opt5'class="accordion help-text"onclick='expandPanel("opt5");'>Logging Out</button>
+	      <button id='opt5'class="accordion help-text">Logging Out</button>
 	      <div class="panel">
 				   <ul class="help-list">
 						 <li>
@@ -212,5 +212,7 @@
 			</div>
 		</div>
 	</div>
+
+	<script type="text/javascript" src="buzzik.js"></script>
 </body>
 </html>
