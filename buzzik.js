@@ -712,6 +712,17 @@ function expandPanel(id) {
         }
 }
 
+function download(content, fileName, contentType) {
+    var a = document.createElement("a");
+    var file = new Blob([content], {type: contentType});
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
+}
+
+function exportBtn() {
+	download(JSON.stringify(spotifyPull), 'rawData.json', 'application/json');
+}
 
 //Event listeners:
 document.getElementById("helpBtn").addEventListener("click", openHelp);
