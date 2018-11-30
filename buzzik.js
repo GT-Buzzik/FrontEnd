@@ -98,9 +98,9 @@ spotifyPull = [
 ];
 
 // Use this call to get data from api.
-spotifyPull = getListeningHistorySingleUser(testUser).Items;
+//spotifyPull = getListeningHistorySingleUser(testUser).Items;
 
-var viewsEnum = Object.freeze({"day": 86400000, "week": 604800000, "month": 2592000000,"year":31540000000}), //Enum to help sort date based on current view
+var viewsEnum = Object.freeze({"day": 86400000, "week": 604800000, "month": 2419200000,"year":31536000000}), //Enum to help sort date based on current view
     viewComp = viewsEnum.day,
     modeEnum = Object.freeze({"line": "line", "pie": "pie", "bar": "bar"}),
     mode = modeEnum.bar,
@@ -480,6 +480,112 @@ function switchChart(chartType, toSwitchOff) {
     }
 }
 
+
+function convertTextToDate(text, dateOffset) {
+    var date = new Date(text);
+    var offset = date.getTimezoneOffset();
+    if (offset > 0) {
+        date.setDate(date.getDate() + dateOffset + 1);
+    }
+    date.setHours(0, 0, 0, 0);
+    return date;
+}
+
+function incrementDateWithView(date, increment) {
+    var newDate = new Date(date);
+    switch (viewComp) {
+        case viewsEnum.day:
+            newDate.setDate(newDate.getDate() + increment);
+            break;
+        case viewsEnum.month:
+            newDate.setMonth(newDate.getMonth() + increment);
+            newDate.setDate(1);
+            break;
+        case viewsEnum.year:
+            newDate.setFullYear(newDate.getFullYear() + increment);
+            newDate.setMonth(0);
+            newDate.setDate(1);
+            break;
+    }
+    return newDate;
+}
+
+function findRange() {
+    tempRange = {
+        min: null,
+        max: null
+    };
+
+    var fromDateField = document.getElementById("fromDateField");
+    var toDateField = document.getElementById("toDateField");
+    if (fromDateField) {
+        if (fromDateField.value) {
+            var fromDate = convertTextToDate(fromDateField.value, 0);
+            tempRange.min = fromDate.valueOf();
+            tempRange.max = incrementDateWithView(fromDate, 1).valueOf();
+
+            if (defaultMax != null) {
+                if (defaultMax > tempRange.max) {
+                    tempRange.max = defaultMax;
+                }
+            }
+        }
+    }
+    if (toDateField) {
+        if (toDateField.value) {
+            var toDate = convertTextToDate(toDateField.value, 1);
+            tempRange.max = toDate.valueOf();
+            if (tempRange.min == null) {
+                tempRange.min = incrementDateWithView(toDate, -1).valueOf();
+
+                if (defaultMin != null) {
+                    if (defaultMin < tempRange.min) {
+                        tempRange.min = defaultMin;
+                    }
+                }
+            }
+        }
+    }
+
+    var errorMessage = document.getElementById("graph-control-range-error");
+    errorMessage.innerHTML = "";
+    if (tempRange.min != null && tempRange.max != null) {
+        // check to make sure the range is large enough
+        var diff = tempRange.max - tempRange.min;
+        if (diff <= 0) {
+            errorMessage.innerHTML = "&#9888 &#9888 &#9888 <br /> <i>From</i> date must come before <i>to</i> date.";
+            tempRange.min = null;
+            tempRange.max = null;
+        } /*else if (diff <= viewComp) {
+            errorMessage.innerHTML = "&#9888 &#9888 &#9888 <br /> Date range cannot be smaller than histogram bar width.";
+            tempRange.min = null;
+            tempRange.max = null;
+        }*/
+    }
+
+    if (tempRange.min == null && tempRange.max == null) {
+        // insert default values
+        if (defaultMin != null && defaultMax != null) {
+            if (defaultMax - defaultMin > viewComp) {
+                tempRange.min = defaultMin;
+                tempRange.max = defaultMax;
+            } else {
+                tempRange.min = incrementDateWithView(defaultMax, -1).valueOf();
+                tempRange.max = incrementDateWithView(tempRange.min, 2).valueOf();
+            }
+        } else {
+            // this case should never happen, because defaultMin and defaultMax are set when the document loads
+            // at least, that's what i hope
+        }
+    } else if (tempRange.min == null || tempRange.max == null) {
+        // case where only one is non-null
+        // this shouldn't happen?? but just in case...
+    }
+
+    filters.range = tempRange;
+}
+
+
 function switchFilter(filterType, toSwitchOff) {
     document.getElementById(filterSwitchedOff).disabled = false;
     document.getElementById(toSwitchOff).disabled = true;
@@ -519,47 +625,61 @@ function switchFilter(filterType, toSwitchOff) {
     }
 }
 
-function convertDateToNumber(text) {
-    // convert to standard format
-    var date = new Date(text);
-    var offset = date.getTimezoneOffset();
-    if (offset > 0) {
-        date.setDate(date.getDate() + 1);
+
+function convertDateToLabel(dateAsNumber) {
+    var labelOptions = {
+        weekday: 'short',
+        year: 'numeric'
+    };
+    if (viewComp <= viewsEnum.month) {
+        labelOptions.month = 'long';
     }
-    date.setHours(0, 0, 0);
-    return date.valueOf();
+    if (viewComp <= viewsEnum.day) {
+        labelOptions.day = 'numeric';
+    }
+
+    var date = new Date(1970, 0, 1, 0, 0, 0, dateAsNumber);
+    return date.toLocaleDateString('en-US', labelOptions);
 }
 
 
+var visualizationStatus = {
+    value: "50",
+    message: "adjkfhskfg"
+};
+
+function showVisualizationStatus() {
+    document.getElementById("graph-status-progress").value = visualizationStatus.value;
+    document.getElementById("graph-status-message").innerText = visualizationStatus.message;
+
+    if (document.getElementById("graph-status").style.display != 'none') {
+        window.setTimeout(showVisualizationStatus, 100);
+    }
+}
+
 function visualizeDataset() {
     // collect date range
-
-    filters.range = {
-        min: defaultMin,
-        max: defaultMax
+    visualizationStatus = {
+        value: "0",
+        message: "Filtering..."
     };
-
-    var fromDateField = document.getElementById("fromDateField");
-    var toDateField = document.getElementById("toDateField");
-    if (fromDateField) {
-        if (fromDateField.value) {
-            filters.range.min = convertDateToNumber(fromDateField.value);
-        }
-    }
-    if (toDateField) {
-        if (toDateField.value) {
-            filters.range.max = convertDateToNumber(toDateField.value);
-        }
-    }
+    findRange();
 
     // construct raw data
+    visualizationStatus = {
+        value: "20",
+        message: "Sorting..."
+    };
     rawData = sortMethod();
 
-
     // fill in dataset and plot
+    visualizationStatus = {
+        value: "40",
+        message: "Setting visualization options..."
+    };
     if (mode != "pie") {
-        options.xaxis.min = filters.range.min;
-        options.xaxis.max = filters.range.max;
+        options.xaxis.min = incrementDateWithView(filters.range.min, 0).valueOf();
+        options.xaxis.max = incrementDateWithView(filters.range.max, 1).valueOf();
         options.xaxis.minTickSize = [1, viewSwitchedOff.substring(7)];
         dataset = [
 			{
@@ -570,23 +690,25 @@ function visualizeDataset() {
         dataset = [];
         for (i=0;i<rawData.length;i++) {
             if (rawData[i] != null) {
+                var dataLabel = rawData[i][0];
+                if (sortMethod == sortByTime) {
+                    dataLabel = convertDateToLabel(dataLabel);
+                }
+
                 dataset.push(
                     {
-                        label: rawData[i][0],
+                        label: dataLabel,
                         data: rawData[i][1]
                     }
                 );
             }
-            /*
-            if (rawData[i] != null && sortMethod == sortByTime) {
-                dataset.push({label: new Date(rawData[i][0]), data: rawData[i][1]});
-            } else if (rawData[i] != null) {
-                dataset.push({label: rawData[i][0], data: rawData[i][1]});
-            }
-            */
         }
     }
 
+    visualizationStatus = {
+        value: "60",
+        message: "Setting histogram options..."
+    };
 	if (mode == "bar") {
 		if (options.xaxis.mode != 'time') {
 			var ticks = [];
@@ -613,7 +735,18 @@ function visualizeDataset() {
 		}
     }
 
+    //document.getElementById("graph-status-message").innerHTML = JSON.stringify(options);
+
+    visualizationStatus = {
+        value: "80",
+        message: "Visualizing..."
+    };
     $.plot($("#graph-placeholder"), dataset, options);
+
+    var graphStatus = document.getElementById("graph-status");
+    if (graphStatus) {
+        graphStatus.style.display = 'none';
+    }
 }
 
 
@@ -725,6 +858,7 @@ function exportBtn() {
 	download(JSON.stringify(spotifyPull), 'rawData.json', 'application/json');
 }
 
+
 //Night mode
 function nightMode() {
   var mode = document.documentElement;
@@ -739,31 +873,53 @@ function nightMode() {
 }, 1000);
 }
 
-//Event listeners:
-document.getElementById("exportBtn").addEventListener("click", exportBtn);
-document.getElementById("helpBtn").addEventListener("click", openHelp);
-document.getElementById("select-day").addEventListener("click", () => {switchView("%m/%d/%Y", "select-day");});
-// document.getElementById("select-week").addEventListener("click", () => {switchView("%m/%d/%Y", "select-week");});
-document.getElementById("select-month").addEventListener("click", () => {switchView("%m/%d/%Y", "select-month");});
-document.getElementById("select-year").addEventListener("click", () => {switchView("%m/%d/%Y", "select-year");});
-document.getElementById("select-bar").addEventListener("click", () => {switchChart("bar", "select-bar");});
-document.getElementById("select-pie").addEventListener("click", () => {switchChart("pie", "select-pie");});
-document.getElementById("select-line").addEventListener("click", () => {switchChart("line", "select-line");});
-document.getElementById("select-none").addEventListener("click", () => {switchFilter("none", "select-none");});
-document.getElementById("select-artist").addEventListener("click", () => {switchFilter("artist", "select-artist");});
-document.getElementById("select-title").addEventListener("click", () => {switchFilter("title", "select-title");});
-document.getElementById("graph-control-refine-btn").addEventListener("click", visualizeDataset);
-document.getElementById("open-calendar").addEventListener("click", openImportCalendar);
-document.getElementById("opt1").addEventListener("click", () => {expandPanel("opt1");});
-document.getElementById("opt2").addEventListener("click", () => {expandPanel("opt2");});
-document.getElementById("opt3").addEventListener("click", () => {expandPanel("opt3");});
-document.getElementById("opt4").addEventListener("click", () => {expandPanel("opt4");});
-document.getElementById("opt5").addEventListener("click", () => {expandPanel("opt5");});
-
-
 
 
 $(document).ready(function () {
+
+    // set defaultMin for (approximately) the start of the school year, defaultMax to current date
+    var defaultMaxDate = new Date(1970, 0, 1, 0, 0, 0, Date.now());
+    defaultMaxDate.setDate(defaultMaxDate.getDate() + 1);
+    defaultMaxDate.setHours(0, 0, 0, 0);
+    defaultMax = defaultMaxDate.valueOf();
+    var defaultMinDate = new Date(defaultMaxDate.getFullYear(), 7, 25, 0, 0, 0, 0);
+    defaultMinDate.setDate(defaultMinDate.getDate() - ((defaultMinDate.getDay() + 6) % 7));
+    defaultMin = defaultMinDate.valueOf();
+
+    filters.range = {
+        min: defaultMin,
+        max: defaultMax
+    };
+
+
+    //Event listeners:
+    document.getElementById("exportBtn").addEventListener("click", exportBtn);
+    document.getElementById("helpBtn").addEventListener("click", openHelp);
+    document.getElementById("select-day").addEventListener("click", () => {switchView("%m/%d/%Y", "select-day"); findRange();});
+    // document.getElementById("select-week").addEventListener("click", () => {switchView("%m/%d/%Y", "select-week");});
+    document.getElementById("select-month").addEventListener("click", () => {switchView("%m/%d/%Y", "select-month"); findRange();});
+    document.getElementById("select-year").addEventListener("click", () => {switchView("%m/%d/%Y", "select-year"); findRange();});
+    document.getElementById("select-bar").addEventListener("click", () => {switchChart("bar", "select-bar");});
+    document.getElementById("select-pie").addEventListener("click", () => {switchChart("pie", "select-pie");});
+    document.getElementById("select-line").addEventListener("click", () => {switchChart("line", "select-line");});
+    document.getElementById("select-none").addEventListener("click", () => {switchFilter("none", "select-none");});
+    document.getElementById("select-artist").addEventListener("click", () => {switchFilter("artist", "select-artist");});
+    document.getElementById("select-title").addEventListener("click", () => {switchFilter("title", "select-title");});
+    document.getElementById("fromDateField").onchange = findRange;
+    document.getElementById("toDateField").onchange = findRange;
+    document.getElementById("graph-control-refine-btn").addEventListener("click", () => {
+        document.getElementById("graph-status").style.display = 'grid';
+        //window.setTimeout(showVisualizationStatus, 100);
+        window.setTimeout(visualizeDataset, 100);
+    });
+    document.getElementById("open-calendar").addEventListener("click", openImportCalendar);
+    document.getElementById("opt1").addEventListener("click", () => {expandPanel("opt1");});
+    document.getElementById("opt2").addEventListener("click", () => {expandPanel("opt2");});
+    document.getElementById("opt3").addEventListener("click", () => {expandPanel("opt3");});
+    document.getElementById("opt4").addEventListener("click", () => {expandPanel("opt4");});
+    document.getElementById("opt5").addEventListener("click", () => {expandPanel("opt5");});
+
+
     document.getElementById(viewSwitchedOff).disabled = true;
     document.getElementById(chartSwitchedOff).disabled = true;
     document.getElementById(filterSwitchedOff).disabled = true;
