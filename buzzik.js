@@ -98,9 +98,9 @@ spotifyPull = [
 ];
 
 // Use this call to get data from api.
-spotifyPull = getListeningHistorySingleUser(testUser).Items;
+//spotifyPull = getListeningHistorySingleUser(testUser).Items;
 
-var viewsEnum = Object.freeze({"day": 86400000, "week": 604800000, "month": 2592000000,"year":31540000000}), //Enum to help sort date based on current view
+var viewsEnum = Object.freeze({"day": 86400000, "week": 604800000, "month": 2419200000,"year":31536000000}), //Enum to help sort date based on current view
     viewComp = viewsEnum.day,
     modeEnum = Object.freeze({"line": "line", "pie": "pie", "bar": "bar"}),
     mode = modeEnum.bar,
@@ -499,9 +499,12 @@ function incrementDateWithView(date, increment) {
             break;
         case viewsEnum.month:
             newDate.setMonth(newDate.getMonth() + increment);
+            newDate.setDate(1);
             break;
         case viewsEnum.year:
             newDate.setFullYear(newDate.getFullYear() + increment);
+            newDate.setMonth(0);
+            newDate.setDate(1);
             break;
     }
     return newDate;
@@ -519,7 +522,7 @@ function findRange() {
         if (fromDateField.value) {
             var fromDate = convertTextToDate(fromDateField.value, 0);
             tempRange.min = fromDate.valueOf();
-            tempRange.max = incrementDateWithView(fromDate, 2).valueOf();
+            tempRange.max = incrementDateWithView(fromDate, 1).valueOf();
 
             if (defaultMax != null) {
                 if (defaultMax > tempRange.max) {
@@ -533,7 +536,7 @@ function findRange() {
             var toDate = convertTextToDate(toDateField.value, 1);
             tempRange.max = toDate.valueOf();
             if (tempRange.min == null) {
-                tempRange.min = incrementDateWithView(toDate, -2).valueOf();
+                tempRange.min = incrementDateWithView(toDate, -1).valueOf();
 
                 if (defaultMin != null) {
                     if (defaultMin < tempRange.min) {
@@ -553,11 +556,11 @@ function findRange() {
             errorMessage.innerHTML = "&#9888 &#9888 &#9888 <br /> <i>From</i> date must come before <i>to</i> date.";
             tempRange.min = null;
             tempRange.max = null;
-        } else if (diff <= viewComp) {
+        } /*else if (diff <= viewComp) {
             errorMessage.innerHTML = "&#9888 &#9888 &#9888 <br /> Date range cannot be smaller than histogram bar width.";
             tempRange.min = null;
             tempRange.max = null;
-        }
+        }*/
     }
 
     if (tempRange.min == null && tempRange.max == null) {
@@ -567,8 +570,8 @@ function findRange() {
                 tempRange.min = defaultMin;
                 tempRange.max = defaultMax;
             } else {
-                tempRange.min = incrementDateWithView(defaultMax, -2);
-                tempRange.max = defaultMax;
+                tempRange.min = incrementDateWithView(defaultMax, -1).valueOf();
+                tempRange.max = incrementDateWithView(tempRange.min, 2).valueOf();
             }
         } else {
             // this case should never happen, because defaultMin and defaultMax are set when the document loads
@@ -675,8 +678,8 @@ function visualizeDataset() {
         message: "Setting visualization options..."
     };
     if (mode != "pie") {
-        options.xaxis.min = filters.range.min;
-        options.xaxis.max = filters.range.max;
+        options.xaxis.min = incrementDateWithView(filters.range.min, 0).valueOf();
+        options.xaxis.max = incrementDateWithView(filters.range.max, 1).valueOf();
         options.xaxis.minTickSize = [1, viewSwitchedOff.substring(7)];
         dataset = [
 			{
@@ -699,13 +702,6 @@ function visualizeDataset() {
                     }
                 );
             }
-            /*
-            if (rawData[i] != null && sortMethod == sortByTime) {
-                dataset.push({label: new Date(rawData[i][0]), data: rawData[i][1]});
-            } else if (rawData[i] != null) {
-                dataset.push({label: rawData[i][0], data: rawData[i][1]});
-            }
-            */
         }
     }
 
@@ -738,6 +734,8 @@ function visualizeDataset() {
 			options.series.bars.barWidth = viewComp;
 		}
     }
+
+    //document.getElementById("graph-status-message").innerHTML = JSON.stringify(options);
 
     visualizationStatus = {
         value: "80",
@@ -911,8 +909,7 @@ $(document).ready(function () {
     document.getElementById("toDateField").onchange = findRange;
     document.getElementById("graph-control-refine-btn").addEventListener("click", () => {
         document.getElementById("graph-status").style.display = 'grid';
-        //window.setTimeout(visualizeDataset, 10);
-        window.setTimeout(showVisualizationStatus, 100);
+        //window.setTimeout(showVisualizationStatus, 100);
         window.setTimeout(visualizeDataset, 100);
     });
     document.getElementById("open-calendar").addEventListener("click", openImportCalendar);
