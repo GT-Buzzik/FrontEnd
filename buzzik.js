@@ -927,7 +927,8 @@ $(document).ready(function () {
     window.onresize = () => {
         document.getElementById("graph-status").style.display = 'grid';
         //window.setTimeout(showVisualizationStatus, 100);
-        window.setTimeout(visualizeDataset, 100);
+        visualizeDataset();
+        // window.setTimeout(visualizeDataset, 100);
     };
 
     document.getElementById(viewSwitchedOff).disabled = true;
