@@ -1,21 +1,72 @@
-html, body {
+html {
 	width: 100%;
 	height: 100%;
+	--sidebar-color: #a6a6a6;
+	--body-color: #262626;
+	--body-background-color: #FFFFFF;
+	--main-content-color: #e2e2e2;
+	--graph-container-color: #FFFFFF;
+	--graph-container-border-color: #dddddd;
+	--graph-control-background-color: #eeeeee;
+	--graph-control-refine-color: #FFFFFF;
+	--graph-control-table-background-color: #eeeeee;
+	--graph-control-table-color: #000000;
+	--yellow-color: rgb(252,185,19);
+	--yellow-border-color: #d4a723;
+	--yellow-color-hover: #f1b011;
+	--box-shadow-color: #b3b3b3;
+	--btn-color: #000000;
+	--btn-background-color: #FFFFFF;
+	--btn-border-color: #FFFFFF;
+}
+
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *:before,
+html.theme-transition *:after {
+	transition: color,background-color 600ms !important;
+	transition-delay: 0ms !important;
+}
+
+html[data-theme="night"] {
+	--sidebar-color: #000f1d;
+	--body-color: #eeeeee;
+	--body-background-color: #000812f5;
+	--main-content-color: #000810;
+	--graph-container-color: #15191d;
+	--graph-container-border-color: #000000;
+	--graph-control-background-color: #020B14;
+	--graph-control-refine-color: #000f1d;
+	--graph-control-table-background-color: #020B14;
+	--graph-control-table-color: #eeeeee;
+	--yellow-color: #172b3b;
+	--yellow-border-color: #0d1f2b;
+	--yellow-color-hover: rgba(#172b3b,.7);
+	--box-shadow-color: #000f1d;
+	--btn-color: #eeeeee;
+	--btn-background-color: #172b3b;
+	--btn-border-color: #0d1f2b;
+}
+
+body {
+	width: 100%;
+	height: 100%;
+	background-color: var(--body-background-color);
+	color: var(--body-color);
 }
 
 input {
-	border: 1px solid white;
+	background-color: var(--btn-background-color);
+	border: 1px solid var(--btn-border-color);
 	border-radius: 3px;
-
-	box-shadow: 1px 1px 2px 0px #b3b3b3;
-
+	box-shadow: 1px 1px 2px 0px var(--box-shadow-color);
 	position: static;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
+	color: var(--body-color);
 }
-
 
 .sidebar {
 	position: fixed;
@@ -25,27 +76,23 @@ input {
 }
 
 #sidebar-left {
-	border-right: 1px solid #a6a6a6;
-
+	border-right: 1px solid;
+	border-color: var(--sidebar-color);
 	left: 0;
 }
 
 #sidebar-right {
 	border-left: 1px solid #a6a6a6;
-
 	right: 0;
 }
 
-
 #graph-control-title {
-	border: 1px solid #d4a723;
+	border: 1px solid;
+	border-color: var(--yellow-border-color);
 	border-left: 0px;
 	border-right: 0px;
-
 	display: table;
-
 	padding: 15px;
-
 	position: absolute;
 	bottom: 70%;
 	left: 0;
@@ -54,12 +101,8 @@ input {
 }
 
 #graph-control {
-	background-color: #eeeeee;
-
-	border: 1px solid #dddddd;
-
+	background-color: var(--graph-control-background-color);
 	padding: 16px 10px;
-
 	position: absolute;
 	bottom: 8%;
 	left: 0;
@@ -72,16 +115,13 @@ input {
 }
 
 #graph-control table, th, td {
-	background-color: #eeeeee;
-	color: black;
-
+	background-color: var(--graph-control-table-background-color);
+	color: var(--graph-control-table-color);
 	border: 0px;
-
 	padding-top: 7px;
 	padding-bottom: 7px;
 	padding-left: 0px;
 	padding-right: 14px;
-
 	font-weight: normal;
 }
 
@@ -99,8 +139,7 @@ input {
 
 
 #graph-control-refine {
-	background-color: white;
-
+	background-color: var(--graph-control-refine-color);
 	position: absolute;
 	bottom: 0;
 	left: 0;
@@ -110,17 +149,14 @@ input {
 
 #graph-control-refine-btn {
 	margin: 0px 6px;
-
 	position: absolute;
 	top: 25%;
 	right: 0;
 	width: 25%;
 }
 
-
 #main-content {
-	background-color: #e2e2e2;
-
+	background-color: var(--main-content-color);
 	position: fixed;
 	top: 0;
 	right: 0;
@@ -128,24 +164,21 @@ input {
 	height: 100%;
 }
 
-
 #graph-container {
-	background-color: white;
-
-	border: 1px solid #dddddd;
-
+	background-color: var(--graph-container-color);
+	border: 1px solid;
+	border-color: var(--graph-container-border-color);
 	margin: 24px 32px;
-
 	position: absolute;
 	top: 0;
 	left: 0;
 	right: 0;
 	height: 85%;
+	box-shadow: 3px 3px 3px 0px var(--box-shadow-color);
 }
 
 #graph-placeholder {
 	margin: 20px;
-
 	position: absolute;
 	top: 0;
 	bottom: 0;
@@ -191,14 +224,12 @@ input {
 
 #options-container {
 	margin: 16px 32px;
-
 	position: absolute;
 	bottom: 0;
 	right: 0;
 	width: 50%;
 	height: 5%;
 }
-
 
 #help {
 	background-color: rgba(192, 192, 192, 0.5);
@@ -211,9 +242,7 @@ input {
 
 #help-popup {
 	background-color: white;
-
 	border-radius: 3px;
-
 	position: fixed;
 	bottom: 10%;
 	top: 10%;
@@ -223,12 +252,8 @@ input {
 
 #help-popup #title {
 	color: #fcb913;
-
 	position: absolute;
-
 }
-
-
 
 .enlarged {
 	font-size: 24px;
@@ -254,7 +279,6 @@ input {
 	margin-top: 30px;
 }
 
-
 .center-horiz {
 	text-align: center;
 }
@@ -264,27 +288,55 @@ input {
 	vertical-align: middle;
 }
 
+button:focus {
+	outline:0;
+}
 
 .btn {
-	background-color: white;
-
-	border: 1px solid white;
+	cursor: pointer;
+	background-color: var(--btn-background-color);
+	border: 1px solid var(--btn-border-color);
 	border-radius: 3px;
-
-	box-shadow: 1px 1px 2px 0px #b3b3b3;
-
+	box-shadow: 1px 1px 2px 0px var(--box-shadow-color);
 	height: 25px;
-
 	font-family: "Arial", Arial, sans-serif;
 	font-size: 11px;
 	font-weight: bold;
+	color: var(--btn-color);
+	transform: translate3d(0, 0, 0);
+	overflow: hidden;
+}
+
+.btn:hover {
+	background-color: rgba(var(--btn-background-color), 0.7);
+}
+
+.btn:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, var(--btn-background-color) 10%, transparent 2%);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  transform: scale(10, 10);
+  opacity: 0;
+  transition: transform .8s, opacity 2s;
+}
+
+.btn:active:after {
+  transform: scale(0, 0);
+  opacity: .3;
+  transition: 0s;
 }
 
 .btn:disabled {
 	background-color: #c6c6c6;
-
 	border-color: #c6c6c6;
-
 	color: black;
 }
 
@@ -304,22 +356,27 @@ input {
 	margin-right: 1%;
 }
 
-
-
 .red {
 	background-color: #ff3426;
-
 	border-color: #f95445;
 }
 
-.yellow {
-	background-color: #fcb913;
+.btn.red:hover {
+	background-color: rgb(255, 16, 0) !important;
+}
 
-	border-color: #d4a723;
+.yellow {
+	background-color: var(--yellow-color);
+	border-color: var(--yellow-border-color);
+	--btn-background-color: var(--yellow-color);
+}
+
+.btn.yellow:hover {
+	background-color: var(--yellow-color-hover) !important;
 }
 
 .help-btn {
-	width: 50%;
+	width: 45%;
 	height: 100%;
 	margin: auto;
 	display: flex;
@@ -412,4 +469,23 @@ input {
 
 .help-list li {
 	padding-bottom: 5px;
+}
+
+.helpText {
+	color: var(btn-color);
+	background-color: var(btn-background-color);
+  transition: .5s ease;
+	margin: 0px;
+  opacity: 0;
+	top: 10%;
+	left: 77%;
+	padding: .25em;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+#buzzik-help:hover .helpText{
+	opacity: 1;
 }
