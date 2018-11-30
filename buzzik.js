@@ -899,6 +899,7 @@ $(document).ready(function () {
 
     //Event listeners:
     document.getElementById("exportBtn").addEventListener("click", exportBtn);
+    document.getElementById("night-mode").addEventListener("click", nightMode);
     document.getElementById("helpBtn").addEventListener("click", openHelp);
     document.getElementById("select-day").addEventListener("click", () => {switchView("%m/%d/%Y", "select-day"); findRange();});
     // document.getElementById("select-week").addEventListener("click", () => {switchView("%m/%d/%Y", "select-week");});
