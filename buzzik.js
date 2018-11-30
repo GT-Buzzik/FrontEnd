@@ -98,7 +98,7 @@ spotifyPull = [
 ];
 
 // Use this call to get data from api.
-//spotifyPull = getListeningHistorySingleUser(testUser).Items;
+// spotifyPull = getListeningHistorySingleUser(testUser).Items;
 
 var viewsEnum = Object.freeze({"day": 86400000, "week": 604800000, "month": 2419200000,"year":31536000000}), //Enum to help sort date based on current view
     viewComp = viewsEnum.day,
@@ -924,7 +924,11 @@ $(document).ready(function () {
     document.getElementById("opt3").addEventListener("click", () => {expandPanel("opt3");});
     document.getElementById("opt4").addEventListener("click", () => {expandPanel("opt4");});
     document.getElementById("opt5").addEventListener("click", () => {expandPanel("opt5");});
-
+    window.onresize = () => {
+        document.getElementById("graph-status").style.display = 'grid';
+        //window.setTimeout(showVisualizationStatus, 100);
+        window.setTimeout(visualizeDataset, 100);
+    };
 
     document.getElementById(viewSwitchedOff).disabled = true;
     document.getElementById(chartSwitchedOff).disabled = true;
