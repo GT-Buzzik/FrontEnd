@@ -680,6 +680,11 @@ function visualizeDataset() {
     if (mode != "pie") {
         options.xaxis.min = incrementDateWithView(filters.range.min, 0).valueOf();
         options.xaxis.max = incrementDateWithView(filters.range.max, 1).valueOf();
+
+        if (options.xaxis.max - options.xaxis.min <= viewComp) {
+            options.xaxis.min = incrementDateWithView(options.xaxis.min, -1).valueOf();
+        }
+
         options.xaxis.minTickSize = [1, viewSwitchedOff.substring(7)];
         dataset = [
 			{
