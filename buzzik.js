@@ -712,6 +712,7 @@ function expandPanel(id) {
         }
 }
 
+//Raw data downloader
 function download(content, fileName, contentType) {
     var a = document.createElement("a");
     var file = new Blob([content], {type: contentType});
@@ -724,7 +725,22 @@ function exportBtn() {
 	download(JSON.stringify(spotifyPull), 'rawData.json', 'application/json');
 }
 
+//Night mode
+function nightMode() {
+  var mode = document.documentElement;
+  mode.classList.add("theme-transition");
+  if (mode.getAttribute("data-theme") != "night") {
+    mode.setAttribute("data-theme","night");
+  } else {
+    mode.removeAttribute("data-theme");
+  }
+  window.setTimeout(function() {
+  document.documentElement.classList.remove('theme-transition')
+}, 1000);
+}
+
 //Event listeners:
+document.getElementById("exportBtn").addEventListener("click", exportBtn);
 document.getElementById("helpBtn").addEventListener("click", openHelp);
 document.getElementById("select-day").addEventListener("click", () => {switchView("%m/%d/%Y", "select-day");});
 // document.getElementById("select-week").addEventListener("click", () => {switchView("%m/%d/%Y", "select-week");});

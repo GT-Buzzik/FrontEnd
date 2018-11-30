@@ -21,8 +21,6 @@ html, body {
 }
 
 body {
-  background-color:#FFFFFF;
-  color: #262626;
   padding: 0;
   margin: 0;
   font: 400 100%/1.25 "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
@@ -351,50 +349,50 @@ ul.secondary a:active {
 
 /* ~496px and less */
 @media only screen and (max-width: 31em) {
-  
+
   /* Form elements */
   input[type="text"],
   textarea {
     width: 100%;
   }
-  
+
   /* Utilities */
   .hide-for-mobile {
     display: none !important;
   }
-  
+
   .hide-for-desktop {
     display: block !important;
   }
-  
+
 }
 
 /* ~496px to ~816px */
 @media only screen and (min-width: 31em) and (max-width: 51em) {
-  
+
   /* Form elements */
   input[type="text"],
   textarea {
     width: 100%;
   }
-  
+
   /* Utilities */
   .hide-for-mobile {
     display: none !important;
   }
-  
+
   .hide-for-desktop {
     display: block !important;
   }
-  
+
   .hide-for-tablet {
     display: none !important;
   }
-  
+
   .show-for-tablet {
     display: block !important;
   }
-  
+
   /* sidebars wrap under main content at this point, which means they'll go full width,
    * so reset max width to match other regions
    */
@@ -404,16 +402,15 @@ ul.secondary a:active {
   #sidebar-right.with-sidebar-left .wysiwyg-float-right {
     max-width: 50%;
   }
-  
+
 }
 
 /* ~816px or more */
 @media only screen and (min-width: 51em) {
-  
+
 }
 
 /* ~1024px or more */
 @media only screen and (min-width: 64em) {
-  
-}
 
+}
