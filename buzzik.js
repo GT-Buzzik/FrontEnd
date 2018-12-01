@@ -364,6 +364,8 @@ var barOptions = {
         show: false
     },
     xaxis: {
+        axisLabel: 'Date',
+        axisLabelUseCanvas: false,
         mode: "time",
         timeformat: "%m/%d/%Y",
         ticks: generateTicks,
@@ -371,6 +373,8 @@ var barOptions = {
         tickColor: "#ababab"
     },
     yaxis: {
+        axisLabel: 'Plays',
+        axisLabelUseCanvas: false,
         min: 0,
         tickDecimals: 0,
         tickColor: "#ababab"
@@ -399,6 +403,8 @@ var lineOptions = {
         show: false
     },
     xaxis: {
+        axisLabel: 'Date',
+        axisLabelUseCanvas: false,
         mode: "time",
         timeformat: "%m/%d/%Y",
         ticks: rawData.length,
@@ -406,7 +412,9 @@ var lineOptions = {
         tickColor: "#ababab"
     },
     yaxis: {
-        tickDecimals: 0,
+        axisLabel: 'Plays',
+        axisLabelUseCanvas: false,
+        tickDecimals: 0
     }
 };
 
@@ -611,6 +619,7 @@ function switchFilter(filterType, toSwitchOff) {
         case 'artist':
             sortMethod = sortByArtist;
             if (mode != 'pie') {
+                options.xaxis.axisLabel = 'Artist';
                 options.xaxis.mode = null;
                 options.xaxis.timeformat = null;
             }
@@ -618,6 +627,7 @@ function switchFilter(filterType, toSwitchOff) {
         case 'title':
             sortMethod = sortByTitle;
             if (mode != 'pie') {
+                options.xaxis.axisLabel = 'Song Title';
                 options.xaxis.mode = null;
                 options.xaxis.timeformat = null;
             }
