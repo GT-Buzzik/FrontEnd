@@ -93,7 +93,7 @@ spotifyPull = [
 ];
 
 // Use this call to get data from api.
-// spotifyPull = getListeningHistorySingleUser(testUser).Items;
+spotifyPull = getListeningHistorySingleUser(testUser).Items;
 
 var viewsEnum = Object.freeze({"day": 86400000, "week": 604800000, "month": 2419200000,"year":31536000000}), //Enum to help sort date based on current view
     viewComp = viewsEnum.day,
@@ -865,6 +865,7 @@ function download(content, fileName, contentType) {
 }
 
 function exportBtn() {
+    // download(JSON.stringify(getUserRawData(testUser)), 'rawData.json', 'application/json');
 	download(JSON.stringify(spotifyPull), 'rawData.json', 'application/json');
 }
 
