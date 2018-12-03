@@ -871,22 +871,22 @@ function openImportCalendar() {
 
 function displayDates() {
     var nodes = document.getElementsByClassName('date-events');
-    nodes.forEach(t => {
-        t.setAttribute('style', 'display:list-item;');
-    });
+    for (var i = 0; i < nodes.length; ++i) {
+        nodes[i].setAttribute('style', 'display:list-item;');
+    };
     document.getElementById('compressor').setAttribute('style', 'display:inline;');
     document.getElementById('decompressor').setAttribute('style', 'display:none;');
 }
 
 function hideDates() {
     var nodes = document.getElementsByClassName('date-events');
-    nodes.forEach((t) => {
-        if (t.getAttribute('id') != 'special') {
-            t.setAttribute('style', 'display:none;');
+    for (var i = 0; i < nodes.length; ++i) {
+        if (nodes[i].getAttribute('id') != 'special') {
+            nodes[i].setAttribute('style', 'display:none;');
         } else {
-            t.setAttribute('style', 'display:list-item;');
+            nodes[i].setAttribute('style', 'display:list-item;');
         }
-    });
+    };
 
     document.getElementById('compressor').setAttribute('style', 'display:none;');
     document.getElementById('decompressor').setAttribute('style', 'display:inline;');
