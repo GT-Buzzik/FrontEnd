@@ -90,9 +90,9 @@
                         <button id="select-pie" class="btn btn-5" value="pie">
                                 Pie Chart
                         </button>
-                        <button id="select-line" class="btn btn-5" value="line">
+                        <!-- <button id="select-line" class="btn btn-5" value="line">
                                 Line Chart
-                        </button>
+                        </button> -->
                     </div>
 				</div>
 
@@ -136,11 +136,12 @@
 			</div>
 
 			<div id="options-container">
+				<button class="btn btn-6" id="refreshBtn">Refresh</button>
 				<button class="btn btn-6" id="exportBtn">Export</button>
 				<button id="open-calendar" class="btn btn-6">Upload Calendar</button>
 				<!-- <button class="btn btn-6">Upload</button> -->
 				<button class="btn btn-6" id="night-mode">Night</button>
-				<button class="btn btn-6 red">Logout</button>
+				<button class="btn btn-6 red" id="logoutBtn">Logout</button>
 			</div>
 
 			<form enctype="multipart/form-data" action="/upload/calendar" method="post">

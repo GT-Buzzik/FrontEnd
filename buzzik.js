@@ -1,19 +1,42 @@
 //Controller for homepage.html
+const authURL = 'https://buzzik-cooperpellaton.c9users.io:8080/';
+const apiURL = authURL + 'api/';
+var testUser = 'spotify:user:genaricname';
 
-const Url = 'https://buzzik-cooperpellaton.c9users.io:8080/api/';
-const testUser = 'spotify:user:genaricname';
 
+function authorize() {
+    var tmp;
+    $.ajax({
+        url:authURL,
+        type:"GET",
+        async: false,
+        crossDomain: true,
+        headers: {
+            "Access-Control-Allow-Origin": apiURL
+        },
+        success: function(result) {
+            console.log("Authorization result: ", result);
+            tmp = JSON.parse(result);
+            testUser = tmp;
+            localStorage.setItem("buzzikUsername", testUser);
+        },
+        error:function(error){
+            console.log('Error ', error);
+            tmp = JSON.parse(error);
+        }
+    });
+}
 
 function getBackendData(endpoint, parms) {
     var tmp;
     $.ajax({
-        url:Url + endpoint,
+        url:apiURL + endpoint,
         type:"GET",
         async: false,
         crossDomain: true,
         data: parms,
         headers: {
-            "Access-Control-Allow-Origin": Url
+            "Access-Control-Allow-Origin": apiURL
         },
         success: function(result) {
             console.log("Get request success: ", result);
@@ -22,6 +45,9 @@ function getBackendData(endpoint, parms) {
         error:function(error){
             console.log('Error ', error);
             tmp = JSON.parse(error);
+            // Prompt login
+            // authorize();
+            alert("Could not retrieve data.");
         }
     });
     return tmp;
@@ -30,7 +56,7 @@ function getBackendData(endpoint, parms) {
 function postToBackend(endpoint, parms, body) {
     var tmp;
     $.ajax({
-        url: Url + endpoint + '?' + jQuery.param(parms),
+        url: apiURL + endpoint + '?' + jQuery.param(parms),
         type: "POST",
         crossDomain: true,
         async: false,
@@ -50,7 +76,7 @@ function postToBackend(endpoint, parms, body) {
 }
 
 function getListeningHistorySingleUser(user_id) {
-    return getBackendData('get_listening_history', {id: user_id});
+    return getBackendData('get_listening_history', {id: user_id}).Items;
 }
 
 function getUserInfo(user_id) {
@@ -93,7 +119,7 @@ spotifyPull = [
 ];
 
 // Use this call to get data from api.
-spotifyPull = getListeningHistorySingleUser(testUser).Items;
+spotifyPull = getListeningHistorySingleUser(testUser);
 
 var viewsEnum = Object.freeze({"day": 86400000, "week": 604800000, "month": 2419200000,"year":31536000000}), //Enum to help sort date based on current view
     viewComp = viewsEnum.day,
@@ -241,11 +267,13 @@ function sortByArtist() {
     }
     artistsData.sort(compareArtists); //should sort the array by amount of listens to an artist
 
+    const numSlices = 10;
     var otherCount = 0;
-    for (i=4;i<artistsData.length;i++) {
+    for (i=numSlices;i<artistsData.length;i++) {
         otherCount += artistsData[i][1];
     }
-    artistsBreakdown = [artistsData[0], artistsData[1], artistsData[2], artistsData[3], ["Other", otherCount]];
+
+    artistsBreakdown = artistsData.slice(0, numSlices).concat(["Other", otherCount]);
     return artistsBreakdown;
 }
 
@@ -905,7 +933,14 @@ $(document).ready(function () {
 
     //Event listeners:
     document.getElementById("exportBtn").addEventListener("click", exportBtn);
+    document.getElementById("refreshBtn").addEventListener("click", () => {
+        spotifyPull = getListeningHistorySingleUser(testUser);
+    });
     document.getElementById("night-mode").addEventListener("click", nightMode);
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+        testUser = "";
+        localStorage.removeItem("buzzikUsername");
+    });
     document.getElementById("helpBtn").addEventListener("click", openHelp);
     document.getElementById("select-day").addEventListener("click", () => {switchView("%m/%d/%Y", "select-day"); findRange();});
     // document.getElementById("select-week").addEventListener("click", () => {switchView("%m/%d/%Y", "select-week");});
@@ -913,7 +948,7 @@ $(document).ready(function () {
     document.getElementById("select-year").addEventListener("click", () => {switchView("%m/%d/%Y", "select-year"); findRange();});
     document.getElementById("select-bar").addEventListener("click", () => {switchChart("bar", "select-bar");});
     document.getElementById("select-pie").addEventListener("click", () => {switchChart("pie", "select-pie");});
-    document.getElementById("select-line").addEventListener("click", () => {switchChart("line", "select-line");});
+    // document.getElementById("select-line").addEventListener("click", () => {switchChart("line", "select-line");});
     document.getElementById("select-none").addEventListener("click", () => {switchFilter("none", "select-none");});
     document.getElementById("select-artist").addEventListener("click", () => {switchFilter("artist", "select-artist");});
     document.getElementById("select-title").addEventListener("click", () => {switchFilter("title", "select-title");});
