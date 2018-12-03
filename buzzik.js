@@ -1,33 +1,41 @@
 //Controller for homepage.html
 const authURL = 'https://buzzik-cooperpellaton.c9users.io:8080/';
 const apiURL = authURL + 'api/';
-var testUser = 'spotify:user:genaricname';
+var testUser = localStorage.getItem("username");
 
 
 function authorize() {
     var tmp;
+
     $.ajax({
         url:authURL,
         type:"GET",
         async: false,
+        dataType: "jsonp",
         crossDomain: true,
-        headers: {
-            "Access-Control-Allow-Origin": apiURL
-        },
         success: function(result) {
             console.log("Authorization result: ", result);
-            tmp = JSON.parse(result);
+            // tmp = JSON.parse(result);
+            tmp = result.user;
             testUser = tmp;
             localStorage.setItem("username", testUser);
         },
         error:function(error){
             console.log('Error ', error);
-            tmp = JSON.parse(error);
+            tmp = error;
+            window.open(authURL);
         }
     });
+    return tmp;
 }
 
 function getBackendData(endpoint, parms) {
+    if (parms.id === undefined || parms.id === null) {
+        parms.id = authorize();
+        console.log("Finished calling authorize.");
+    }
+    console.log(parms);
+
     var tmp;
     $.ajax({
         url:apiURL + endpoint,
@@ -40,13 +48,13 @@ function getBackendData(endpoint, parms) {
         },
         success: function(result) {
             console.log("Get request success: ", result);
-            tmp = JSON.parse(result);
+            // tmp = JSON.parse(result);
+            tmp = result;
         },
         error:function(error){
             console.log('Error ', error);
-            tmp = JSON.parse(error);
+            tmp = error;
             // Prompt login
-            // authorize();
             alert("Could not retrieve data.");
         }
     });
@@ -54,6 +62,7 @@ function getBackendData(endpoint, parms) {
 }
 
 function postToBackend(endpoint, parms, body) {
+
     var tmp;
     $.ajax({
         url: apiURL + endpoint + '?' + jQuery.param(parms),
@@ -114,12 +123,11 @@ function test2() {
 }
 
 
-spotifyPull = [
-    {"track_duration":147.45,"track_explicit":false,"listening_date":1540250973629,"track_name":"Our Song"},{"track_duration":147.45,"track_explicit":false,"listening_date":1540250973631,"track_name":"Our Song"},{"track_duration":182.373,"track_explicit":false,"listening_date":1540251156117,"track_name":"Deep Breaths"},{"track_duration":242.333,"track_explicit":false,"listening_date":1540251398618,"track_name":"FAKE LOVE"},{"track_duration":242.333,"track_explicit":false,"listening_date":1540251398620,"track_name":"FAKE LOVE"},{"track_duration":207.959,"track_explicit":false,"listening_date":1540251606810,"track_name":"Cut To The Feeling"},{"track_duration":218.613,"track_explicit":false,"listening_date":1540428292915,"track_name":"Save The Last Dance For Me"},{"track_duration":216.637,"track_explicit":false,"listening_date":1540428510038,"track_name":"Kids Again"},{"track_duration":147.373,"track_explicit":false,"listening_date":1540428657893,"track_name":"Perfidia (For \"Rumba\")"},{"track_duration":199.253,"track_explicit":false,"listening_date":1540428981746,"track_name":"Why Worry"},{"track_duration":179.995,"track_explicit":false,"listening_date":1540429162251,"track_name":"Rändajad"},{"track_duration":208.506,"track_explicit":false,"listening_date":1540429371221,"track_name":"It’s a Ruse"},{"track_duration":187.848,"track_explicit":false,"listening_date":1540429559577,"track_name":"I'm Sticking With You Baby"},{"track_duration":267.64,"track_explicit":false,"listening_date":1540429828779,"track_name":"Musetta's Waltz"},{"track_duration":200.666,"track_explicit":false,"listening_date":1540430029864,"track_name":"Pulmon"},{"track_duration":255.588,"track_explicit":false,"listening_date":1540430285982,"track_name":"Make Me Feel"},{"track_duration":230.666,"track_explicit":false,"listening_date":1540430517014,"track_name":"Anticipation"},{"track_duration":132.64,"track_explicit":false,"listening_date":1540430650165,"track_name":"If I Knew"},{"track_duration":191.25,"track_explicit":false,"listening_date":1540431564956,"track_name":"The Vampire Masquerade"},{"track_duration":197.253,"track_explicit":false,"listening_date":1541617723363,"track_name":"Where Do We Go"},{"track_duration":193.293,"track_explicit":false,"listening_date":1541617926017,"track_name":"Personal"},{"track_duration":195,"track_explicit":false,"listening_date":1541618121234,"track_name":"Who You Are (feat. MIO)"},{"track_duration":195,"track_explicit":false,"listening_date":1541618121316,"track_name":"Who You Are (feat. MIO)"},{"track_duration":200.386,"track_explicit":false,"listening_date":1541618321959,"track_name":"Wild Heart"},{"track_duration":200.386,"track_explicit":false,"listening_date":1541618321961,"track_name":"Wild Heart"},{"track_duration":206.373,"track_explicit":false,"listening_date":1541618528502,"track_name":"Memorized"},{"track_duration":206.373,"track_explicit":false,"listening_date":1541618528532,"track_name":"Memorized"},{"track_duration":160.95,"track_explicit":false,"listening_date":1541618688802,"track_name":"Carousel"},{"track_duration":208.493,"track_explicit":false,"listening_date":1541618897948,"track_name":"Speakerphone"},{"track_duration":211.236,"track_explicit":false,"listening_date":1541619109472,"track_name":"Starry Night"},{"track_duration":221.093,"track_explicit":false,"listening_date":1541619330652,"track_name":"Dancing Queen"},{"track_duration":221.093,"track_explicit":false,"listening_date":1541619330666,"track_name":"Dancing Queen"},{"track_duration":254.246,"track_explicit":false,"listening_date":1541704242427,"track_name":"Dragon (feat. Skybourne)"}
-];
-
 // Use this call to get data from api.
+// if (testUser === undefined)
+//     authorize();
 spotifyPull = getListeningHistorySingleUser(testUser);
+
 
 var viewsEnum = Object.freeze({"day": 86400000, "week": 604800000, "month": 2419200000,"year":31536000000}), //Enum to help sort date based on current view
     viewComp = viewsEnum.day,
@@ -977,11 +985,15 @@ $(document).ready(function () {
     document.getElementById("exportBtn").addEventListener("click", exportBtn);
     document.getElementById("refreshBtn").addEventListener("click", () => {
         spotifyPull = getListeningHistorySingleUser(testUser);
+        window.setTimeout(visualizeDataset, 300);
     });
     document.getElementById("night-mode").addEventListener("click", nightMode);
     document.getElementById("logoutBtn").addEventListener("click", () => {
-        testUser = "";
+        testUser = undefined;
+        spotifyPull = [];
         localStorage.removeItem("username");
+        alert("Logged out.");
+        visualizeDataset();
     });
     document.getElementById("helpBtn").addEventListener("click", openHelp);
     document.getElementById("select-day").addEventListener("click", () => {switchView("%m/%d/%Y", "select-day"); findRange();});
