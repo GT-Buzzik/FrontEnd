@@ -904,8 +904,10 @@ function nightMode() {
   mode.classList.add("theme-transition");
   if (mode.getAttribute("data-theme") != "night") {
     mode.setAttribute("data-theme","night");
+    localStorage.setItem("night-mode", "on");
   } else {
     mode.removeAttribute("data-theme");
+    localStorage.removeItem("night-mode");
   }
   window.setTimeout(function() {
   document.documentElement.classList.remove('theme-transition')
@@ -930,6 +932,9 @@ $(document).ready(function () {
         max: defaultMax
     };
 
+    if (localStorage.getItem("night-mode")) {
+        document.documentElement.setAttribute("data-theme","night");
+    }
 
     //Event listeners:
     document.getElementById("exportBtn").addEventListener("click", exportBtn);
