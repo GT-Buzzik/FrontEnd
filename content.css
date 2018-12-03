@@ -18,6 +18,11 @@ html {
 	--btn-color: #000000;
 	--btn-background-color: #FFFFFF;
 	--btn-border-color: #FFFFFF;
+	--help-modal-content-bg: #fefefe;
+	--accordion-bg: #eee;
+	--accordion-color: #eee;
+	--accordion-active-bg: #0d97ff;
+	--panel-bg: #FFFFFF;
 }
 
 html.theme-transition,
@@ -46,6 +51,11 @@ html[data-theme="night"] {
 	--btn-color: #eeeeee;
 	--btn-background-color: #172b3b;
 	--btn-border-color: #0d1f2b;
+	--help-modal-content-bg: #00070d;
+	--accordion-bg: #0b1924;
+	--accordion-color: #FFFFFF;
+	--accordion-active-bg: #0b0f11;
+	--panel-bg: #00070d;
 }
 
 body {
@@ -397,7 +407,7 @@ button:focus {
 }
 
 .help-Modal-Content {
-  background-color: #fefefe;
+  background-color: var(--help-modal-content-bg);
   margin: 5% auto;
   padding: 2px 20px 20px;
   border: 1px solid #888;
@@ -420,23 +430,23 @@ button:focus {
 }
 
 .accordion {
-	background-color: #eee;
-    color: #444;
-    cursor: pointer;
-    padding: 18px;
-    width: 100%;
-    text-align: left;
-    /* border: none; */
-    outline: none;
-    transition: 0.4s;
+		background-color: var(--accordion-bg);
+	  color: var(--accordion-color);
+	  cursor: pointer;
+	  padding: 18px;
+	  width: 100%;
+	  text-align: left;
+	  /* border: none; */
+	  outline: none;
+	  transition: 0.4s;
 }
 .active, .accordion:hover {
-    background-color: #0d97ff;
+    background-color: var(--accordion-active-bg);
 		color: white;
 }
 .panel {
     padding: 0 18px;
-    background-color: white;
+    background-color: var(--panel-bg);
     overflow: hidden;
     display: none;
 }
