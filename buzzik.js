@@ -845,7 +845,7 @@ function openImportCalendar() {
                         document.getElementById('calendar-imported-dates').setAttribute('style', 'display: inline;')
                         values.forEach((t, i) => {
                             var node = document.createElement("LI");
-                            var textNode = document.createTextNode("Event: " + t.summary + ", Time:" + t.time.toLocaleDateString("en-US"));
+                            var textNode = document.createTextNode("Event: " + t.summary + ", Date: " + t.time.toLocaleDateString("en-US"));
                             node.appendChild(textNode);
                             node.setAttribute('class', 'date-events');
                             console.log(t, i);
