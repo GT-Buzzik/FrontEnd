@@ -281,7 +281,8 @@ function sortByArtist() {
         otherCount += artistsData[i][1];
     }
 
-    artistsBreakdown = artistsData.slice(0, numSlices).concat(["Other", otherCount]);
+    artistsBreakdown = artistsData.slice(0, numSlices);
+    console.log(artistsBreakdown);
     return artistsBreakdown;
 }
 
@@ -633,7 +634,12 @@ function switchFilter(filterType, toSwitchOff) {
         case 'none':
             sortMethod = sortByTime;
             if (mode != 'pie') {
+                options.series.bars.barWidth = viewComp;
+                options.series.bars.align = "left";
                 options.xaxis.mode = "time";
+                options.xaxis.axisLabel = "Date";
+                options.xaxis.ticks = generateTicks;
+                options.xaxis.minTickSize = [1, viewSwitchedOff.substring(7)];
                 switch (viewComp) {
                     case viewsEnum.day:
                         options.xaxis.timeformat = "%m/%d/%Y";
@@ -650,6 +656,8 @@ function switchFilter(filterType, toSwitchOff) {
         case 'artist':
             sortMethod = sortByArtist;
             if (mode != 'pie') {
+                //console.log('here');
+                //console.log(ticks);
                 options.xaxis.axisLabel = 'Artist';
                 options.xaxis.mode = null;
                 options.xaxis.timeformat = null;
@@ -712,6 +720,7 @@ function visualizeDataset() {
         message: "Sorting..."
     };
     rawData = sortMethod();
+    //console.log(rawData);
 
     // fill in dataset and plot
     visualizationStatus = {
@@ -763,8 +772,17 @@ function visualizeDataset() {
 					ticks.push([i, rawData[i][0]]);
 				}
 			}
-			console.log(ticks);
+            //console.log(dataset[0].data);
+            for(i=0; i<dataset[0].data.length;i++) {
+                dataset[0].data[i][0] = i;
+            }
+			//console.log(ticks);
 			options.xaxis.ticks = ticks;
+            options.xaxis.max = 8;
+            options.xaxis.min = 0;
+            //options.xaxis.minTickSize = 0;
+            options.series.bars.barWidth = 0.5;
+            options.series.bars.align = "center";
 		} else {
 			switch (viewComp) {
 				case viewsEnum.day:
@@ -787,6 +805,8 @@ function visualizeDataset() {
         value: "80",
         message: "Visualizing..."
     };
+    console.log(options);
+    console.log(dataset);
     $.plot($("#graph-placeholder"), dataset, options);
 
     var graphStatus = document.getElementById("graph-status");
