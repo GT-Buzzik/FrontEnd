@@ -940,6 +940,8 @@ $(document).ready(function () {
     document.getElementById("exportBtn").addEventListener("click", exportBtn);
     document.getElementById("refreshBtn").addEventListener("click", () => {
         spotifyPull = getListeningHistorySingleUser(testUser);
+        document.getElementById("graph-status").style.display = 'grid';
+        window.setTimeout(visualizeDataset, 500);
     });
     document.getElementById("night-mode").addEventListener("click", nightMode);
     document.getElementById("logoutBtn").addEventListener("click", () => {
