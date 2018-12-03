@@ -845,7 +845,7 @@ function openImportCalendar() {
                         document.getElementById('calendar-imported-dates').setAttribute('style', 'display: inline;')
                         for (i = 0; i < values.length; i++) {
                             var node = document.createElement("LI");
-                            var textNode = document.createTextNode("Event: " + values[i].summary + ", Time:" + values[i].time);
+                            var textNode = document.createTextNode("Event: " + values[i].summary + ", Date: " + values[i].time.toLocaleDateString("en-US"));
                             node.appendChild(textNode);
                             document.getElementById("dates").appendChild(node);
                             // $('dates').append("<li>" + values[i].summary + "," + values[i].time + "</li>");
