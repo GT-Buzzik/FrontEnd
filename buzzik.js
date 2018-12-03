@@ -136,6 +136,7 @@ var viewsEnum = Object.freeze({"day": 86400000, "week": 604800000, "month": 2419
     numberSongsData = [],
     artistsBreakdown = [], //A breakdown consists of the four top results and the combined weight of all other categories.
     titlesBreakdown = [],
+    explicitBreakdown = [],
     defaultMin = null,
     defaultMax = null; //change these to start at the current academic year
 
@@ -330,6 +331,47 @@ function sortByTitle() {
     // titlesBreakdown = [titleData[0], titleData[1], titleData[2], titleData[3], ["Other", otherCount]];
     return titlesBreakdown;
 } //Implement
+
+function sortByExplicit() {
+  var explicitSongData = [];
+  var explicitSongInData = [];
+
+  var comparatorFunc = function(explicit1, explicit2) {
+      if (explicit1 == explicit2)
+          {return true;}
+      else
+          {return false;}
+  }
+
+  for (i = 0; i < spotifyPull.length; i++) {
+    if (filterData(spotifyPull[i])) {
+      if (spotifyPull[i].track_explicit) {
+        var exists = false;
+  			var title = spotifyPull[i].track_name;
+  			for (var j = 0; j < explicitSongData.length; j++) {
+  				if (comparatorFunc(explicitSongInData[j], title)) {
+  					explicitSongData[j][1]++;
+  					exists = true;
+  					break;
+  				}
+  			}
+  			if (!exists) {
+  				explicitSongData.push([title, 1]);
+  				explicitSongInData.push(title);
+  			}
+  		}
+    }
+  }
+
+  var compareTitles = function(a, b) {
+      return b[1] - a[1];
+  }
+  explicitSongData.sort(compareTitles);
+  explicitBreakdown = explicitSongData;
+  console.log(spotifyPull);
+  console.log(explicitBreakdown);
+  return explicitBreakdown;
+}
 
 var sortMethod = function() {return null;};
 
@@ -671,6 +713,14 @@ function switchFilter(filterType, toSwitchOff) {
                 options.xaxis.timeformat = null;
             }
             break;
+        case 'explicit':
+          sortMethod = sortByExplicit;
+          if (mode != 'pie') {
+            options.xaxis.axisLabel = "[Explicit] Song Title";
+            options.xaxis.mode = null;
+            options.xaxis.timeformat = null;
+          }
+
     }
 }
 
@@ -980,7 +1030,6 @@ function nightMode() {
 }
 
 
-
 $(document).ready(function () {
 
     // set defaultMin for (approximately) the start of the school year, defaultMax to current date
@@ -1026,6 +1075,7 @@ $(document).ready(function () {
     document.getElementById("select-none").addEventListener("click", () => {switchFilter("none", "select-none");});
     document.getElementById("select-artist").addEventListener("click", () => {switchFilter("artist", "select-artist");});
     document.getElementById("select-title").addEventListener("click", () => {switchFilter("title", "select-title");});
+    document.getElementById("select-explicit").addEventListener("click", () => {switchFilter("explicit", "select-explicit");});
     document.getElementById("decompressor").addEventListener("click", () => {displayDates();});
     document.getElementById("compressor").addEventListener("click", () => {hideDates();});
     document.getElementById("fromDateField").onchange = findRange;
