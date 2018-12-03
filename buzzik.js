@@ -845,9 +845,15 @@ function openImportCalendar() {
                         document.getElementById('calendar-imported-dates').setAttribute('style', 'display: inline;')
                         values.forEach((t, i) => {
                             var node = document.createElement("LI");
-                            var textNode = document.createTextNode("Event: " + values[i].summary + ", Date: " + values[i].time.toLocaleDateString("en-US"));
+                            var textNode = document.createTextNode("Event: " + values[i].summary + ", Time:" + values[i].time);
                             node.appendChild(textNode);
+                            node.setAttribute('class', 'date-events');
                             document.getElementById("dates").appendChild(node);
+                            if (i > 3) {
+                                node.setAttribute('style', 'display:none;');
+                            } else {
+                                node.setAttribute('id', 'special');
+                            }
                         });
                     };
                 }
@@ -859,6 +865,29 @@ function openImportCalendar() {
 
     fileInput.click();
 
+}
+
+function displayDates() {
+    var nodes = document.getElementsByClassName('date-events');
+    for (i=0;i<nodes.length;i++) {
+        nodes[i].setAttribute('style', 'display:list-item;')
+    }
+    document.getElementById('compressor').setAttribute('style', 'display:inline;');
+    document.getElementById('decompressor').setAttribute('style', 'display:none;');
+}
+
+function hideDates() {
+    var nodes = document.getElementsByClassName('date-events');
+    for (i=0;i<nodes.length;i++) {
+        if (nodes[i].getAttribute('id') != 'special') {
+            nodes[i].setAttribute('style', 'display:none;');
+        } else {
+            nodes[i].setAttribute('style', 'display:list-item;');
+        }
+    };
+
+    document.getElementById('compressor').setAttribute('style', 'display:none;');
+    document.getElementById('decompressor').setAttribute('style', 'display:inline;');
 }
 
 function openHelp() {
@@ -947,8 +976,6 @@ $(document).ready(function () {
     document.getElementById("exportBtn").addEventListener("click", exportBtn);
     document.getElementById("refreshBtn").addEventListener("click", () => {
         spotifyPull = getListeningHistorySingleUser(testUser);
-        document.getElementById("graph-status").style.display = 'grid';
-        window.setTimeout(visualizeDataset, 500);
     });
     document.getElementById("night-mode").addEventListener("click", nightMode);
     document.getElementById("logoutBtn").addEventListener("click", () => {
@@ -966,6 +993,8 @@ $(document).ready(function () {
     document.getElementById("select-none").addEventListener("click", () => {switchFilter("none", "select-none");});
     document.getElementById("select-artist").addEventListener("click", () => {switchFilter("artist", "select-artist");});
     document.getElementById("select-title").addEventListener("click", () => {switchFilter("title", "select-title");});
+    document.getElementById("decompressor").addEventListener("click", () => {displayDates();});
+    document.getElementById("compressor").addEventListener("click", () => {hideDates();});
     document.getElementById("fromDateField").onchange = findRange;
     document.getElementById("toDateField").onchange = findRange;
     document.getElementById("graph-control-refine-btn").addEventListener("click", () => {
