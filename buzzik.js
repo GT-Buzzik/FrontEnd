@@ -845,15 +845,17 @@ function openImportCalendar() {
                         document.getElementById('calendar-imported-dates').setAttribute('style', 'display: inline;')
                         values.forEach((t, i) => {
                             var node = document.createElement("LI");
-                            var textNode = document.createTextNode("Event: " + values[i].summary + ", Time:" + values[i].time);
+                            var textNode = document.createTextNode("Event: " + t.summary + ", Time:" + t.time.toLocaleDateString("en-US"));
                             node.appendChild(textNode);
                             node.setAttribute('class', 'date-events');
-                            document.getElementById("dates").appendChild(node);
-                            if (i > 3) {
+                            console.log(t, i);
+                            if (i >= 3) {
                                 node.setAttribute('style', 'display:none;');
                             } else {
                                 node.setAttribute('id', 'special');
                             }
+                            document.getElementById("dates").appendChild(node);
+
                         });
                     };
                 }
@@ -869,22 +871,22 @@ function openImportCalendar() {
 
 function displayDates() {
     var nodes = document.getElementsByClassName('date-events');
-    for (i=0;i<nodes.length;i++) {
-        nodes[i].setAttribute('style', 'display:list-item;')
-    }
+    nodes.forEach(t => {
+        t.setAttribute('style', 'display:list-item;');
+    });
     document.getElementById('compressor').setAttribute('style', 'display:inline;');
     document.getElementById('decompressor').setAttribute('style', 'display:none;');
 }
 
 function hideDates() {
     var nodes = document.getElementsByClassName('date-events');
-    for (i=0;i<nodes.length;i++) {
-        if (nodes[i].getAttribute('id') != 'special') {
-            nodes[i].setAttribute('style', 'display:none;');
+    nodes.forEach((t) => {
+        if (t.getAttribute('id') != 'special') {
+            t.setAttribute('style', 'display:none;');
         } else {
-            nodes[i].setAttribute('style', 'display:list-item;');
+            t.setAttribute('style', 'display:list-item;');
         }
-    };
+    });
 
     document.getElementById('compressor').setAttribute('style', 'display:none;');
     document.getElementById('decompressor').setAttribute('style', 'display:inline;');
