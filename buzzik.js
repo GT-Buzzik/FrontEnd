@@ -18,7 +18,7 @@ function authorize() {
             console.log("Authorization result: ", result);
             tmp = JSON.parse(result);
             testUser = tmp;
-            localStorage.setItem("buzzikUsername", testUser);
+            localStorage.setItem("username", testUser);
         },
         error:function(error){
             console.log('Error ', error);
@@ -900,8 +900,7 @@ function download(content, fileName, contentType) {
 }
 
 function exportBtn() {
-    // download(JSON.stringify(getUserRawData(testUser)), 'rawData.json', 'application/json');
-	download(JSON.stringify(spotifyPull), 'rawData.json', 'application/json');
+    download(JSON.stringify(getUserRawData(testUser)), 'rawData.json', 'application/json');
 }
 
 
@@ -953,7 +952,7 @@ $(document).ready(function () {
     document.getElementById("night-mode").addEventListener("click", nightMode);
     document.getElementById("logoutBtn").addEventListener("click", () => {
         testUser = "";
-        localStorage.removeItem("buzzikUsername");
+        localStorage.removeItem("username");
     });
     document.getElementById("helpBtn").addEventListener("click", openHelp);
     document.getElementById("select-day").addEventListener("click", () => {switchView("%m/%d/%Y", "select-day"); findRange();});
