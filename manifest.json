@@ -10,5 +10,6 @@
 "chrome_url_overrides" : {
   "newtab": "homepage.html"
 },
+"content_security_policy": "script-src 'self' https://buzzik-cooperpellaton.c9users.io:8080/; object-src 'self'",
  "permissions": ["activeTab"]
 }
