@@ -20,6 +20,7 @@ input[name=dataType] {
 }
 
 #buzzik-logo {
+  background: #FFFFFF;
   width: 200px;
   height: 200px;
   box-shadow: 2px 2px 2px 1px rgba(0,0,0,.2);
@@ -107,6 +108,3 @@ input[name=dataType] {
 .login-input {
   width: 100%;
 }
-
-
-
