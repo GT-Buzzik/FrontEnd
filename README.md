@@ -16,8 +16,16 @@ The Front End for Buzzik
 * Frontend Application currently only presents the Student side of the project. The data is persisted in the backend and the APIs exist for it to be retrieved in a future project.
 * Notifications and account settings aren't implemented.
 * Does not currently interact with the GT CAS system.
+* Occasionally the bar graph does not properly render, but setting the filter to "Date" and clicking "Refine" will fix this problem.
 
 # Installation Guide
+
+### Pre-requisites
+
+* As Buzzik is delivered as a Google Chrome extension, users must have the Google chrome browser installed on their machine.
+* There are no dependent third party libraries.
+
+### Installation
 
 1. Download this frontend repository and extract it somewhere.
 2. Open up Google Chrome and navigate to the Extensions menu. (click the three dots in the top right, then click "More Tools", then click "Extensions")
@@ -29,3 +37,11 @@ The Front End for Buzzik
 8. Open a new tab (2 times) and everything should be properly populated.
 9. To log out, click "logout" and delete your spotify cookies in the browser settings.
 10. To remove the extension, go back into the extensions menu and click the remove button by the buzzik extension.
+
+### Usage
+
+* Running the extension is simply done whenever the user opens a new tab.
+
+### Troubleshooting
+* If data fails to load, click the "Refresh" button and the system will prompt you to log in.
+* If you have recently logged in, but the extension states that it cannot retrieve data, reload the application by opening a new tab.
